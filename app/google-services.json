@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1009596989680",
+    "firebase_url": "https://mysteryshopper-1edc5.firebaseio.com",
+    "project_id": "mysteryshopper-1edc5",
+    "storage_bucket": "mysteryshopper-1edc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009596989680:android:3af339cfb343da9f968235",
+        "android_client_info": {
+          "package_name": "com.pinkfry.tech.mysteryshopper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009596989680-4r21qmiurf2lqu5t2jq7u6djdrt2tlel.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pinkfry.tech.mysteryshopper",
+            "certificate_hash": "225518c64eada65847110ce1ff0e084837b9c2cd"
+          }
+        },
+        {
+          "client_id": "1009596989680-r6ucc6cnrgchqhpss1cla1e9aohb4tss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmpLloUWdLPN_bk8mXzPFDNYdgB2V2U-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009596989680-r6ucc6cnrgchqhpss1cla1e9aohb4tss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
