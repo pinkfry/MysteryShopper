@@ -18,17 +18,19 @@ import java.util.ArrayList;
 public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.MyHolder> {
     ArrayList<String> arrayList;
     Activity activity;
+    String clientName;
 
-    public ClientStoreAdapter(ArrayList<String> arrayList, Activity activity) {
+    public ClientStoreAdapter(ArrayList<String> arrayList, Activity activity,String clientName) {
         this.arrayList = arrayList;
         this.activity=activity;
+        this.clientName=clientName;
     }
 
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater li= (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view=li.inflate(R.layout.adapter_client_list,parent,false);
+        View view=li.inflate(R.layout.adapter_store_list,parent,false);
         return  new MyHolder(view);
     }
 
@@ -39,7 +41,8 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(activity, QuizShowActivity.class);
-                intent.putExtra("name",arrayList.get(position));
+                intent.putExtra("storeName",arrayList.get(position));
+                intent.putExtra("clientName",clientName);
                 activity.startActivity(intent);
             }
         });

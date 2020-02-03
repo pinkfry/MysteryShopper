@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,19 +22,19 @@ class ShowStoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_store)
-        var name=intent.getStringExtra("name")
-        supportActionBar!!.title = name
+        var clientName=intent.getStringExtra("name")
+        supportActionBar!!.title = clientName
         var arrayList=ArrayList<String>()
-        rvStore.layoutManager=LinearLayoutManager(this)
-        val adapter=ClientStoreAdapter(arrayList,this)
+        rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
+        val adapter=ClientStoreAdapter(arrayList,this,clientName)
         rvStore.adapter=adapter
         fabAddStore.setOnClickListener {
             var intent=Intent(this,AddNewStoreActivity::class.java)
-            intent.putExtra("name",name)
+            intent.putExtra("name",clientName)
             startActivity(intent)
         }
 
-        var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(name)
+        var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
         dref.child(resources.getString(R.string.firebaseStore)).addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 

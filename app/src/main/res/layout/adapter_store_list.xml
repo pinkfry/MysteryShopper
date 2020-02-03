@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-          android:padding="10dp"
+          android:padding="5dp"
               android:layout_height="wrap_content">
     <ImageView android:layout_width="60dp"
                android:background="@drawable/modified_circle_image_view"
