@@ -5,6 +5,7 @@
           android:padding="5dp"
               android:layout_height="wrap_content">
     <ImageView android:layout_width="60dp"
+               android:id="@+id/imageAvtar"
                android:background="@drawable/modified_circle_image_view"
                android:src="@drawable/ic_launcher_foreground"
                android:layout_height="60dp"/>

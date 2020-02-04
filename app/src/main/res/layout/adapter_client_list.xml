@@ -5,8 +5,8 @@
           android:padding="10dp"
               android:layout_height="wrap_content">
     <ImageView android:layout_width="60dp"
-               android:background="@drawable/modified_circle_image_view"
-               android:src="@drawable/ic_launcher_foreground"
+                android:id="@+id/imageAvtar"
+               android:src="@drawable/image_fifth_female"
                android:layout_height="60dp"/>
 <TextView android:layout_width="match_parent"
           android:id="@+id/tvClientName"

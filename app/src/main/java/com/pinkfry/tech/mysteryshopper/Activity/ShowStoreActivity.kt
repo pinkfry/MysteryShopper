@@ -18,19 +18,29 @@ import com.pinkfry.tech.mysteryshopper.model.SingleStore
 import kotlinx.android.synthetic.main.activity_add_store.*
 
 class ShowStoreActivity : AppCompatActivity() {
-
+lateinit var keyArray:ArrayList<String>;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_store)
+        keyArray= ArrayList()
         var clientName=intent.getStringExtra("name")
+        var total=intent.getIntExtra("total",0)
         supportActionBar!!.title = clientName
-        var arrayList=ArrayList<String>()
+        var arrayList=ArrayList<SingleStore>()
         rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
         val adapter=ClientStoreAdapter(arrayList,this,clientName)
         rvStore.adapter=adapter
         fabAddStore.setOnClickListener {
             var intent=Intent(this,AddNewStoreActivity::class.java)
             intent.putExtra("name",clientName)
+            intent.putExtra("total",total)
+            startActivity(intent)
+        }
+        btnAddQuestions.setOnClickListener {
+            var intent=Intent(this@ShowStoreActivity,QuestionAddingActivity::class.java)
+            intent.putExtra("clientName",clientName)
+            intent.putStringArrayListExtra("keyArray",keyArray)
+            intent.putExtra("total",total)
             startActivity(intent)
         }
 
@@ -43,7 +53,8 @@ class ShowStoreActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 arrayList.clear()
                for(snapshot in dataSnapshot.children){
-                   arrayList.add(snapshot.getValue(SingleStore::class.java)!!.name)
+                   keyArray.add(snapshot.key.toString())
+                   arrayList.add(snapshot.getValue(SingleStore::class.java)!!)
                    adapter.notifyDataSetChanged()
                }
             }

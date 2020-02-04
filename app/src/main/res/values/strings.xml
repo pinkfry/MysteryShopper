@@ -3,5 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="FirebaseClient">CLIENT</string>
     <string name="firebaseStore">Stores</string>
+    <string name="ansGiven">ansGiven</string>
 
 </resources>

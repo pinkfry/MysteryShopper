@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
        rvClient.layoutManager= LinearLayoutManager(this@MainActivity)
-        val arrayList=ArrayList<String>()
+        val arrayList=ArrayList<SingleClient>()
         var adapter= ClientListAdapter(arrayList,this@MainActivity)
         rvClient.adapter=adapter
         var dref=FirebaseDatabase.getInstance().reference
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 arrayList.clear()
                 Log.d("MAIN","${arrayList.size}")
                 for(snapshot in dataSnapshot.children)
-                arrayList.add(snapshot.getValue(SingleClient::class.java)!!.name)
+                arrayList.add(snapshot.getValue(SingleClient::class.java)!!)
                 adapter.notifyDataSetChanged()
             }
         })
