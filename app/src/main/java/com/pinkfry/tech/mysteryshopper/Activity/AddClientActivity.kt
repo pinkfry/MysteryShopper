@@ -63,10 +63,15 @@ class AddClientActivity : AppCompatActivity() {
             if(name.isNotEmpty()){
                 childAddRef.child(name).child("imagePosition").setValue(selectedPosition)
                 childAddRef.child(name).child("name").setValue(name).addOnSuccessListener {
+                    etClientName.setText("")
                     Toast.makeText(this,"Client Successfully Added",Toast.LENGTH_SHORT).show()
                 }.addOnCanceledListener {
+
                     Toast.makeText(this,"Failed To Added",Toast.LENGTH_SHORT).show()
                 }
+            }
+            else{
+                Toast.makeText(this,"Please Enter the Name",Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -30,6 +30,7 @@ class QuizShowActivity : AppCompatActivity() {
         var storeName=intent.getStringExtra("storeName")
         val clientName=intent.getStringExtra("clientName")
         val ansToSend=intent.getStringExtra("ansToSend")
+        var totalClient=intent.getIntExtra("totalClient",0)
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<Int?>?>() {}.type
 
@@ -64,8 +65,8 @@ class QuizShowActivity : AppCompatActivity() {
             dref = FirebaseDatabase.getInstance().reference
                 .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
                 .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
-                .child(resources.getString(R.string.ansGiven))
-            dref.setValue(getFinalOptionStatus()).addOnSuccessListener {
+            dref.child("totalClient").setValue(totalClient+1)
+            dref.child(resources.getString(R.string.ansGiven)).setValue(getFinalOptionStatus()).addOnSuccessListener {
                 Toast.makeText(this,"Successfully Added Response",Toast.LENGTH_SHORT).show()
                 finish()
             }.addOnFailureListener{

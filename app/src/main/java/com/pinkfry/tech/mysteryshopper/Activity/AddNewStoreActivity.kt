@@ -23,17 +23,23 @@ val total=intent.getIntExtra("total",0)
             val name=etStoreName.text.toString()
             val address=etAddress.text.toString()
             val phone=etPhoneNo.text.toString()
-            if(name.isNotEmpty()){
+            if(name.isNotEmpty()&& address.isNotEmpty()&& phone.isNotEmpty()){
                 val AnsGiven=ArrayList<Int>(total)
                 for( a in 1..total)
                 AnsGiven.add(0)
                 Log.d("ANSA",AnsGiven.toString())
                 val responseGiven=ResponseGiven(AnsGiven,name,address,phone)
                 childAddRef.child(name).setValue(responseGiven).addOnSuccessListener {
+                    etStoreName.setText("")
+                    etAddress.setText("")
+                    etPhoneNo.setText("")
                     Toast.makeText(this,"Store Successfully Added", Toast.LENGTH_SHORT).show()
                 }.addOnCanceledListener {
                     Toast.makeText(this,"Failed To Add Store", Toast.LENGTH_SHORT).show()
                 }
+            }
+            else{
+                Toast.makeText(this,"Please Fill All the Fields", Toast.LENGTH_SHORT).show()
             }
         }
     }

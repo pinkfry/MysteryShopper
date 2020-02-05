@@ -32,14 +32,14 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionAdapter.MyHolder> 
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater li= (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view=li.inflate(R.layout.adapter_store_list,parent,false);
+        View view=li.inflate(R.layout.adpter_option_add,parent,false);
         return  new MyHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
-        holder.tvClientName.setText(arrayList.get(position).getOption());
-        holder.imageAvtar.setVisibility(View.GONE);
+        holder.tvOptionName.setText(arrayList.get(position).getOption());
+        holder.tvNumber.setText((position+1)+". ");
 
     }
 
@@ -49,12 +49,12 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionAdapter.MyHolder> 
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
-        TextView tvClientName;
-        ImageView imageAvtar;
+        TextView tvOptionName,tvNumber;
+
         public MyHolder(@NonNull View itemView) {
             super(itemView);
-            tvClientName=itemView.findViewById(R.id.tvClientName);
-            imageAvtar=itemView.findViewById(R.id.imageAvtar);
+            tvOptionName=itemView.findViewById(R.id.tvOptionName);
+           tvNumber=itemView.findViewById(R.id.tvNumber);
 
         }
     }

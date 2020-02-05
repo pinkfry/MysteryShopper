@@ -3,6 +3,7 @@ package com.pinkfry.tech.mysteryshopper.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,11 +38,16 @@ lateinit var keyArray:ArrayList<String>;
             startActivity(intent)
         }
         btnAddQuestions.setOnClickListener {
-            var intent=Intent(this@ShowStoreActivity,QuestionAddingActivity::class.java)
-            intent.putExtra("clientName",clientName)
-            intent.putStringArrayListExtra("keyArray",keyArray)
-            intent.putExtra("total",total)
-            startActivity(intent)
+            if(arrayList.size!=0) {
+                var intent = Intent(this@ShowStoreActivity, QuestionAddingActivity::class.java)
+                intent.putExtra("clientName", clientName)
+                intent.putStringArrayListExtra("keyArray", keyArray)
+                intent.putExtra("total", total)
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this,"Please Add A Store first",Toast.LENGTH_SHORT).show()
+            }
         }
 
         var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)

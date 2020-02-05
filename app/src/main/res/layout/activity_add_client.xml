@@ -2,23 +2,25 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-
         xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Activity.AddClientActivity">
-    <androidx.viewpager2.widget.ViewPager2 android:layout_width="match_parent"
-                                         android:id="@+id/viewPager2"
-                                         android:layout_height="wrap_content">
+    <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:id="@+id/viewPager2"
+            android:layout_height="wrap_content">
 
     </androidx.viewpager2.widget.ViewPager2>
- <EditText android:layout_width="match_parent"
-           android:id="@+id/etClientName"
-           android:hint="Name"
-           android:layout_margin="10dp"
-           android:layout_height="wrap_content"
-           tools:ignore="HardcodedText"/>
+    <EditText android:layout_width="match_parent"
+              android:id="@+id/etClientName"
+              android:hint="Name"
+              android:layout_margin="10dp"
+              android:layout_height="wrap_content"
+              tools:ignore="HardcodedText"/>
     <Button android:layout_width="wrap_content"
             android:text="Add"
             android:layout_gravity="center"

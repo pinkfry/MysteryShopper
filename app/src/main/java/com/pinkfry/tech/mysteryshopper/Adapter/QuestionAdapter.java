@@ -38,9 +38,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyHold
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater li = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (viewType==1){
         View view = li.inflate(R.layout.adapter_show_questions, parent, false);
         Log.d(TAG, "QuestionAdapter: "+QuizShowActivity.ansToSendArrayList.size()+" "+arrayList.size());
-        return new MyHolder(view);
+        return new MyHolder(view);}
+        else if (viewType==2)
+        {
+
+        }
     }
 
     @Override
@@ -92,7 +97,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyHold
         }
     }
 
-    RadioButton addRadioView(String option,int index) {
+    @Override
+    public int getItemViewType(int position) {
+        return arrayList.get(position).getType();
+    }
+
+    RadioButton addRadioView(String option, int index) {
         RadioButton rb = new RadioButton(context);
         rb.setId(index);
         rb.setText(option);

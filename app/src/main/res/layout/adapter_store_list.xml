@@ -1,20 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
               android:layout_width="match_parent"
-          android:padding="5dp"
+              android:padding="5dp"
+              android:id="@+id/linearSingleStore"
               android:layout_height="wrap_content">
-    <ImageView android:layout_width="60dp"
-               android:id="@+id/imageAvtar"
-               android:background="@drawable/modified_circle_image_view"
-               android:src="@drawable/ic_launcher_foreground"
-               android:layout_height="60dp"/>
-<TextView android:layout_width="match_parent"
-          android:id="@+id/tvClientName"
-          android:padding="20dp"
-              android:text="hello"
-          android:textSize="15sp"
-          android:textColor="@color/colorBlack"
-          android:fontFamily="sans-serif-medium"
-          android:layout_height="wrap_content"/>
+
+    <FrameLayout android:layout_width="0dp"
+                 android:layout_weight="2"
+                 android:layout_height="match_parent">
+
+
+        <TextView android:layout_width="60dp"
+
+                  android:id="@+id/tvAvatar"
+                  android:textColor="@color/colorWhite"
+                  android:text="AN"
+                  android:gravity="center"
+                  android:textStyle="bold"
+                  android:layout_gravity="center"
+                  android:textSize="22sp"
+                  android:background="@drawable/modified_circle_image_view"
+                  android:backgroundTint="#000"
+                  android:layout_height="60dp"/>
+    </FrameLayout>
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_weight="6"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="match_parent"
+                  android:padding="20dp"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+
+
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/tvClientName"
+                  android:text="Name"
+                  android:textSize="15sp"
+                  android:textColor="@color/colorBlack"
+                  android:fontFamily="sans-serif-medium"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/tvAddress"
+                  android:text="Address"
+                  android:textSize="13sp"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/tvPhoneNo"
+                  android:text="Phone No."
+                  android:textSize="12sp"
+                  android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+        <TextView android:layout_width="match_parent"
+                  android:background="@color/backgroundGrey"
+                  android:layout_gravity="bottom"
+                  android:layout_marginEnd="10dp"
+                  android:layout_marginStart="10dp"
+                  android:layout_height="1dp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="0dp"
+                 android:layout_weight="1"
+                  android:orientation="vertical"
+                 android:layout_height="match_parent">
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="Score"
+                  android:layout_gravity="center|top"
+                  android:textStyle="bold"
+                  android:textColor="@color/colorBlack"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/tvScore"
+                  android:gravity="center"
+                  android:textSize="12sp"
+                  android:textColor="@color/colorBlack"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </LinearLayout>

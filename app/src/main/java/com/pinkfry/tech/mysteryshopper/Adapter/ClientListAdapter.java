@@ -20,10 +20,14 @@ import java.util.ArrayList;
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.MyHolder> {
     ArrayList<SingleClient> arrayList;
     Activity activity;
+    int  []imagesArray;
 public static final String TAG="CLA";
     public ClientListAdapter(ArrayList<SingleClient> arrayList, Activity activity) {
         this.arrayList = arrayList;
         this.activity=activity;
+
+        imagesArray = new int[]{R.drawable.image_first_male,R.drawable.image_first_female,R.drawable.image_second_male,R.drawable.image_second_female,R.drawable.image_third_male,R.drawable.image_third_female,R.drawable.image_forth_male,R.drawable.image_forth_female,R.drawable.image_fifth_male,R.drawable.image_fifth_female};
+
     }
 
     @NonNull
@@ -37,6 +41,7 @@ public static final String TAG="CLA";
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
         holder.tvClientName.setText(arrayList.get(position).getName());
+        holder.imageAvtar.setImageResource(imagesArray[arrayList.get(position).getImagePosition()]);
         holder.tvClientName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

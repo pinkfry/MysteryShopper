@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("MAIN","${arrayList.size}")
                 for(snapshot in dataSnapshot.children)
                 arrayList.add(snapshot.getValue(SingleClient::class.java)!!)
+                progressShowClient.visibility= View.GONE
                 adapter.notifyDataSetChanged()
             }
         })
