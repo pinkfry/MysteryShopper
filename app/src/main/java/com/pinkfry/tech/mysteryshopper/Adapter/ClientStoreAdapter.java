@@ -16,7 +16,9 @@ import com.google.gson.Gson;
 import com.pinkfry.tech.mysteryshopper.Activity.QuizShowActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
+import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel;
 import com.pinkfry.tech.mysteryshopper.model.SingleStore;
+import com.pinkfry.tech.mysteryshopper.model.UpperAnsGivenModel;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,10 +27,12 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     ArrayList<SingleStore> arrayList;
     Activity activity;
     String clientName;
+    int total;
     int []colorArray;
-    public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName) {
+    public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName,int total) {
         this.arrayList = arrayList;
         this.activity=activity;
+        this.total=total;
         this.clientName=clientName;
         colorArray=new int[]{Color.RED,Color.GREEN,Color.BLACK,Color.GRAY,Color.BLUE};
     }
@@ -47,6 +51,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
         holder.tvClientName.setText(singleStore.getName());
         holder.tvAddress.setText(singleStore.getAddress());
         holder.tvPhoneNo.setText(singleStore.getPhoneNo());
+
         holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven())));
         holder.tvAvatar.setText(singleStore.getName().substring(0,2).toUpperCase());
         holder.tvAvatar.setBackgroundTintList(ColorStateList.valueOf(colorArray[new Random().nextInt(5)]));
@@ -84,10 +89,11 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
 
         }
     }
-    int getToatalScore(ArrayList<Integer> ansList){
+    int getToatalScore(ArrayList<UpperAnsGivenModel> ansList){
         int ans=0;
-        for(int value: ansList){
-            ans+=value;
+        for(UpperAnsGivenModel value: ansList){
+            if(value.getShortedByDate().get("06022020")!=null)
+            ans+=value.getShortedByDate().get("06022020").getValue();
         }
         return  ans;
 

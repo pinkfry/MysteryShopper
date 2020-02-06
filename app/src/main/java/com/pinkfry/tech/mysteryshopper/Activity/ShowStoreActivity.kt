@@ -29,10 +29,10 @@ lateinit var keyArray:ArrayList<String>;
         supportActionBar!!.title = clientName
         var arrayList=ArrayList<SingleStore>()
         rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
-        val adapter=ClientStoreAdapter(arrayList,this,clientName)
+        val adapter=ClientStoreAdapter(arrayList,this,clientName,total)
         rvStore.adapter=adapter
         fabAddStore.setOnClickListener {
-            var intent=Intent(this,AddNewStoreActivity::class.java)
+            val intent=Intent(this,AddNewStoreActivity::class.java)
             intent.putExtra("name",clientName)
             intent.putExtra("total",total)
             startActivity(intent)

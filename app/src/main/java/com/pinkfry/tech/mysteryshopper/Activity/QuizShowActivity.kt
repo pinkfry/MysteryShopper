@@ -13,15 +13,18 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pinkfry.tech.mysteryshopper.Adapter.QuestionAdapter
 import com.pinkfry.tech.mysteryshopper.R
+import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel
 import com.pinkfry.tech.mysteryshopper.model.QuestionsModel
+import com.pinkfry.tech.mysteryshopper.model.UpperAnsGivenModel
 import kotlinx.android.synthetic.main.activity_quiz_show.*
 import java.lang.reflect.Type
 
 
 class QuizShowActivity : AppCompatActivity() {
     companion object{
-        lateinit var ansToSendArrayList:ArrayList<Int>
-        lateinit var ansArray: Array<Int>
+        lateinit var ansToSendArrayList:ArrayList<AnsGivenModel>
+        lateinit var arraylistGot:ArrayList<UpperAnsGivenModel>
+        lateinit var ansArray: ArrayList<AnsGivenModel>
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +35,14 @@ class QuizShowActivity : AppCompatActivity() {
         val ansToSend=intent.getStringExtra("ansToSend")
         var totalClient=intent.getIntExtra("totalClient",0)
         val gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<Int?>?>() {}.type
-
-        ansToSendArrayList=gson.fromJson<ArrayList<Int>>(ansToSend,type)
-
-        Log.d("QSA", "$ansToSend $ansToSendArrayList")
+        val type: Type = object : TypeToken<ArrayList<UpperAnsGivenModel?>?>() {}.type
+        arraylistGot=gson.fromJson<ArrayList<UpperAnsGivenModel>>(ansToSend,type)
+        ansToSendArrayList= ArrayList()
+        for((element,index) in arraylistGot){
+            element["06022020"]?.let { ansToSendArrayList.add(it) }
+            Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
+        }
+        ansArray= ArrayList()
 
         supportActionBar!!.title = storeName
         var dref= FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child("Questions")
@@ -54,8 +60,11 @@ class QuizShowActivity : AppCompatActivity() {
                     Log.d("QSA","$questionArrayList")
 
                 }
-                ansArray=Array(questionArrayList.size) { 0 }
-                var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,ansToSendArrayList)
+                for(value in 1..questionArrayList.size)
+                {
+                    ansArray.add(AnsGivenModel())
+                }
+                var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName)
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
                 rvQuizQuestions.adapter=questionAdapter
 
@@ -74,12 +83,16 @@ class QuizShowActivity : AppCompatActivity() {
             }
         }
     }
-    fun getFinalOptionStatus() : ArrayList<Int>{
+    fun getFinalOptionStatus() : ArrayList<UpperAnsGivenModel>{
 
-       for((index,value)in ansToSendArrayList.withIndex())
+       for((index,element)in ansToSendArrayList.withIndex())
        {
-            ansToSendArrayList[index]=value+ ansArray[index]
+           var value=element.ans
+           value.addAll(ansArray[index].ans)
+           var ansGivenModel=AnsGivenModel(value,element.value+ ansArray[index].value)
+           Log.d("QSA",ansGivenModel.toString())
+           arraylistGot[index].shortedByDate["06022020"] = ansGivenModel
        }
-        return ansToSendArrayList
+        return arraylistGot
     }
 }
