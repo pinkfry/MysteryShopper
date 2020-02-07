@@ -35,6 +35,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.1'
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    //noinspection DuplicatePlatformClasses
+    implementation 'org.json:json:20160212'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

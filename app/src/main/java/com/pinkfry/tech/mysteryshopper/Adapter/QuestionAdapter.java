@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,8 +33,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Context context;
     String clientName, storeName;
     DatabaseReference dref;
-    TimePickerDialog timePicker;
-    DatePickerDialog dialog;
+
 
     public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName) {
         this.arrayList = arrayList;
@@ -42,25 +43,28 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         dref = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.FirebaseClient)).child(clientName).child(context.getResources().getString(R.string.firebaseStore)).child(storeName).child(context.getResources().getString(R.string.ansGiven));
 
-
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater li = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view;
+
         if (viewType == 1) {
+            View view;
             view = li.inflate(R.layout.adapter_show_questions, parent, false);
 //        Log.d(TAG, "QuestionAdapter: "+QuizShowActivity.ansToSendArrayList.size()+" "+arrayList.size());
             return new MyHolder(view);
         } else if (viewType == 2) {
+            View view;
             view = li.inflate(R.layout.adapter_show_questions_2, parent, false);
             return new MyHolderDate(view);
         } else if (viewType == 3) {
+            View view;
             view = li.inflate(R.layout.adapter_show_questions_3, parent, false);
             return new MyHolderTime(view);
         } else {
+            View view;
             view = li.inflate(R.layout.adapter_show_questions_4, parent, false);
             return new MyHolderInput(view);
         }
@@ -68,8 +72,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder,  final int position) {
+
         final QuestionsModel questionsModel = arrayList.get(position);
+        Log.d(TAG, "onDateSet: " + position);
         if (questionsModel.getType() == 1) {
             ((MyHolder) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
             int index = 0;
@@ -85,49 +91,52 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
         } else if (questionsModel.getType() == 2) {
+            DatePickerDialog dialog = null;
+           DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
+               @Override
+               public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                   ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + month + "/" + year);
+                   Log.d(TAG, "onDateSet: " + position);
+                   QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderDate) holder).btnGetDate.getText().toString());
+               }
+           };
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 dialog = new DatePickerDialog(context);
-                dialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + month + "/" + year);
-                        QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderDate) holder).btnGetDate.getText().toString());
-                    }
-                });
+                dialog.setOnDateSetListener(listener);
             }
             ((MyHolderDate) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+            final DatePickerDialog finalDialog = dialog;
             ((MyHolderDate) holder).btnGetDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.show();
+                    finalDialog.show();
+
                 }
             });
             Log.d(TAG, "onBindViewHolder: " + ((MyHolderDate) holder).btnGetDate.getText().toString());
 
 
         } else if (questionsModel.getType() == 3) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-
-                timePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        ((MyHolderTime) holder).btnGetTime.setText(hourOfDay + " : " + minute + " ");
-                        QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderTime) holder).btnGetTime.getText().toString());
-
-                    }
-                }, 0, 0, true);
-
-            }
-            ((MyHolderTime) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
-            ((MyHolderTime) holder).btnGetTime.setOnClickListener(new View.OnClickListener() {
+            TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
                 @Override
-                public void onClick(View v) {
-                    timePicker.show();
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    ((MyHolderTime) holder).btnGetTime.setText(hourOfDay + " : " + minute + " ");
+                    QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderTime) holder).btnGetTime.getText().toString());
+
                 }
-            });
+            };
+
+           final TimePickerDialog timePicker = new TimePickerDialog(context, listener, 0, 0, true);
+        ((MyHolderTime) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+        ((MyHolderTime) holder).btnGetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                timePicker.show();
+            }
+        });
 
 
         } else if (questionsModel.getType() == 4) {
@@ -170,10 +179,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
-        RadioGroup radioGroupQuestion;
-        TextView etQuestion;
+       public RadioGroup radioGroupQuestion;
+       public TextView etQuestion;
 
-        public MyHolder(@NonNull View itemView) {
+        MyHolder(@NonNull View itemView) {
             super(itemView);
             radioGroupQuestion = itemView.findViewById(R.id.radioGroupOptions);
             etQuestion = itemView.findViewById(R.id.tvQuestion);
@@ -183,13 +192,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class MyHolderDate extends RecyclerView.ViewHolder {
-        TextView etQuestion;
-        Button btnGetDate;
-
+       public TextView etQuestion;
+        public Button btnGetDate;
         public MyHolderDate(@NonNull View itemView) {
             super(itemView);
             btnGetDate = itemView.findViewById(R.id.btnGetDate);
             etQuestion = itemView.findViewById(R.id.tvQuestion);
+
         }
     }
 

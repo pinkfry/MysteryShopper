@@ -2,6 +2,7 @@ package com.pinkfry.tech.mysteryshopper.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
@@ -68,6 +69,7 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etDateQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etDateQuestion.text.toString(), ArrayList(), 2)
                 clientRef.push().setValue(questionModels)
+                Log.d("QAA",keyArray.toString())
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
                         .setValue(UpperAnsGivenModel(hashMapOf(),2))

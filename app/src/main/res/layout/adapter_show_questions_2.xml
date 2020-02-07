@@ -24,6 +24,7 @@
                   android:textColor="@color/colorBlack"
                   android:textSize="15sp"
                   android:layout_height="wrap_content"/>
+
         <Button android:layout_width="match_parent"
                 android:id="@+id/btnGetDate"
                 android:layout_height="wrap_content"/>

@@ -25,6 +25,7 @@ class QuizShowActivity : AppCompatActivity() {
         lateinit var ansToSendArrayList:ArrayList<AnsGivenModel>
         lateinit var arraylistGot:ArrayList<UpperAnsGivenModel>
         lateinit var ansArray: ArrayList<AnsGivenModel>
+        lateinit var date:String
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,7 @@ class QuizShowActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quiz_show)
         var storeName=intent.getStringExtra("storeName")
         val clientName=intent.getStringExtra("clientName")
+         date=intent.getStringExtra("date")!!
         val ansToSend=intent.getStringExtra("ansToSend")
         var totalClient=intent.getIntExtra("totalClient",0)
         val gson = Gson()
@@ -39,7 +41,13 @@ class QuizShowActivity : AppCompatActivity() {
         arraylistGot=gson.fromJson<ArrayList<UpperAnsGivenModel>>(ansToSend,type)
         ansToSendArrayList= ArrayList()
         for((element,index) in arraylistGot){
-            element["06022020"]?.let { ansToSendArrayList.add(it) }
+            if(element[date]==null){
+                ansToSendArrayList.add(AnsGivenModel())
+            }
+            else {
+                element[date]?.let { ansToSendArrayList.add(it) }
+            }
+            Log.d("QSA", element[date].toString())
             Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
         }
         ansArray= ArrayList()
@@ -91,7 +99,7 @@ class QuizShowActivity : AppCompatActivity() {
            value.addAll(ansArray[index].ans)
            var ansGivenModel=AnsGivenModel(value,element.value+ ansArray[index].value)
            Log.d("QSA",ansGivenModel.toString())
-           arraylistGot[index].shortedByDate["06022020"] = ansGivenModel
+           arraylistGot[index].shortedByDate[date] = ansGivenModel
        }
         return arraylistGot
     }

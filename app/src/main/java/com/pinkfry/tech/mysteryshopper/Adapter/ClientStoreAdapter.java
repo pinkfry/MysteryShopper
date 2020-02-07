@@ -29,11 +29,13 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     String clientName;
     int total;
     int []colorArray;
-    public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName,int total) {
+    String date;
+    public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName,int total,String date) {
         this.arrayList = arrayList;
         this.activity=activity;
         this.total=total;
         this.clientName=clientName;
+        this.date=date;
         colorArray=new int[]{Color.RED,Color.GREEN,Color.BLACK,Color.GRAY,Color.BLUE};
     }
 
@@ -60,6 +62,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
             public void onClick(View v) {
                 Intent intent=new Intent(activity, QuizShowActivity.class);
                 intent.putExtra("storeName",singleStore.getName());
+                intent.putExtra("date",date);
                 intent.putExtra("clientName",clientName);
                 intent.putExtra("totalClient",singleStore.getTotalClient());
                 Gson gson=new Gson();
@@ -92,8 +95,8 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     int getToatalScore(ArrayList<UpperAnsGivenModel> ansList){
         int ans=0;
         for(UpperAnsGivenModel value: ansList){
-            if(value.getShortedByDate().get("06022020")!=null)
-            ans+=value.getShortedByDate().get("06022020").getValue();
+            if(value.getShortedByDate().get(date)!=null)
+            ans+=value.getShortedByDate().get(date).getValue();
         }
         return  ans;
 

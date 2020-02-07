@@ -27,5 +27,11 @@
             android:id="@+id/btnAddQuestions"
             android:layout_margin="5dp"
             android:layout_height="50dp"/>
+    <Button android:layout_width="wrap_content"
+            android:text="Create JSON"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:id="@+id/btnCreateJson"
+            android:layout_height="wrap_content"/>
 
 </FrameLayout>
