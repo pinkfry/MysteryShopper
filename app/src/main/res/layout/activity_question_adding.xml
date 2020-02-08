@@ -28,7 +28,7 @@
     <EditText android:layout_width="match_parent"
               android:layout_margin="10dp"
               android:hint="Enter the Question"
-              android:inputType="textCapWords"
+              android:inputType="textCapSentences"
               android:id="@+id/etQuestion"
               android:layout_height="wrap_content"/>
     <LinearLayout
@@ -38,7 +38,7 @@
         <EditText android:layout_width="0dp"
                   android:layout_weight="3"
                   android:hint="Enter the Options"
-                  android:inputType="textCapWords"
+                  android:inputType="textCapSentences"
                   android:id="@+id/etOptions"
                   android:layout_height="wrap_content"/>
         <EditText android:layout_width="0dp"

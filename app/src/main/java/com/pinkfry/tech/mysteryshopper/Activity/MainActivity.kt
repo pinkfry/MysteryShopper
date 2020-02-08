@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,8 +45,8 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         })
-        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        fab.setOnClickListener {
+            //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
             var intent=Intent(this@MainActivity, AddClientActivity::class.java)
             startActivity(intent)
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> {
-                
+                Toast.makeText(this,"True",Toast.LENGTH_SHORT).show()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

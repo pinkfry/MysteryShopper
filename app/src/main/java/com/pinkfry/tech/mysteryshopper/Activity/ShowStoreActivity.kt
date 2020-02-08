@@ -1,24 +1,30 @@
 package com.pinkfry.tech.mysteryshopper.Activity
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.os.FileUtils
+import android.os.Environment
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
-import org.json.CDL;
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import com.google.gson.Gson
 import com.pinkfry.tech.mysteryshopper.Adapter.ClientStoreAdapter
 import com.pinkfry.tech.mysteryshopper.R
-import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel
 import com.pinkfry.tech.mysteryshopper.model.ModelExportData
 import com.pinkfry.tech.mysteryshopper.model.SingleStore
 import kotlinx.android.synthetic.main.activity_add_store.*
+import org.json.CDL
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -29,15 +35,25 @@ import kotlin.collections.ArrayList
 
 
 class ShowStoreActivity : AppCompatActivity() {
-lateinit var keyArray:ArrayList<String>;
+lateinit var keyArray:ArrayList<String>
+    lateinit var arrayList:ArrayList<SingleStore>
+    private lateinit var clientName:String
+    lateinit var resetRef:DatabaseReference
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_store)
+
         keyArray= ArrayList()
-        var clientName=intent.getStringExtra("name")
+         clientName=intent.getStringExtra("name")!!
         var total=intent.getIntExtra("total",0)
-        supportActionBar!!.title = clientName
-        var arrayList=ArrayList<SingleStore>()
+        var questionList=intent.getStringExtra("questionList")
+        var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
+        toolbar.title = clientName
+          toolbar.inflateMenu(R.menu.menu_store_option)
+        setSupportActionBar(toolbar)
+        window.statusBarColor= getColor(R.color.colorPrimaryDark)
+          arrayList= ArrayList()
         var calendar=Calendar.getInstance();
         var date="${calendar.get(Calendar.DATE)}${calendar.get(Calendar.MONTH)}${calendar.get(Calendar.YEAR)}"
         rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
@@ -49,6 +65,32 @@ lateinit var keyArray:ArrayList<String>;
             intent.putExtra("total",total)
             startActivity(intent)
         }
+//        btnResetAll.setOnClickListener {
+//        resetRef= dref.child(resources.getString(R.string.firebaseStore))
+//            resetRef.addValueEventListener(object :ValueEventListener{
+//             override fun onCancelled(p0: DatabaseError) {
+//            Toast.makeText(this@ShowStoreActivity,"Failed, No internet Connectivity",Toast.LENGTH_SHORT).show()
+//                 resetRef.removeEventListener(this)
+//             }
+//
+//             override fun onDataChange(dataSnapshot: DataSnapshot) {
+//               for(snapshot in dataSnapshot.children){
+//                   var storeModel=snapshot.getValue(SingleStore::class.java)
+//                   if(storeModel!=null) {
+//                       for ((index, element) in storeModel.AnsGiven.withIndex()) {
+//                           resetRef.child(snapshot.key.toString())
+//                               .child(resources.getString(R.string.ansGiven)).child(index.toString())
+//                               .child("shortedByDate").setValue(null)
+//                       }
+//                       resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0)
+//                   }
+//
+//                   resetRef.removeEventListener(this)
+//
+//               }
+//             }
+//         })
+//        }
         btnAddQuestions.setOnClickListener {
             if(arrayList.size!=0) {
                 var intent = Intent(this@ShowStoreActivity, QuestionAddingActivity::class.java)
@@ -61,11 +103,24 @@ lateinit var keyArray:ArrayList<String>;
                 Toast.makeText(this,"Please Add A Store first",Toast.LENGTH_SHORT).show()
             }
         }
-            btnCreateJson.setOnClickListener {
-                getExportedData(arrayList)
-            }
+//            btnCreateJson.setOnClickListener {
+//                if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED&& ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+//                {
+//                    Log.d("SSA","HERE")
+////                    getExportedData(arrayList)
+//                    var intent=Intent(this@ShowStoreActivity,DownloadDataActivity::class.java)
+//                    val gson = Gson()
+//                    val jsonToSend = gson.toJson(arrayList)
+//                    intent.putExtra("singleStore",jsonToSend)
+//                    intent.putExtra("clientName",clientName)
+//                    startActivity(intent)
+//                }
+//                else{
+//                     ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE),1805)
+//                }
+//            }
 
-        var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
+
         dref.child(resources.getString(R.string.firebaseStore)).addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
@@ -78,53 +133,13 @@ lateinit var keyArray:ArrayList<String>;
                    arrayList.add(snapshot.getValue(SingleStore::class.java)!!)
                    adapter.notifyDataSetChanged()
                }
+
+
             }
         })
     }
 
-    fun getTheDataset( storeArrayList:ArrayList<SingleStore>){
-        var stringarry= arrayListOf("06022020","07022020")
-        var mapList= hashMapOf<String,ArrayList<AnsGivenModel>>()
-        var finalJson=JSONArray()
-        var ansGivenArrayList=ArrayList<AnsGivenModel>()
-        for(value in storeArrayList) {
-            var upperAnsGivenArrayList=value.AnsGiven
-            var dateJsonArray=JSONObject()
-            for(k in stringarry) {
 
-                var shortByDateJsonArray=JSONArray()
-                for (i in 0 until upperAnsGivenArrayList.size) {
-                    var singleDateJson=JSONObject()
-                    var ansGiven = storeArrayList[0].AnsGiven[i].shortedByDate["06022020"]
-//                    ansGiven?.let { ansGivenArrayList.add(it) }
-                    var ansJsonObject=JSONArray()
-                    for(element in ansGiven!!.ans) {
-                        ansJsonObject.put(element)
-                    }
-                    singleDateJson.put("ans",ansJsonObject)
-                    singleDateJson.put("value",ansGiven.value)
-                    shortByDateJsonArray.put(singleDateJson)
-                }
-
-//                mapList[k] = ansGivenArrayList
-//                ansGivenArrayList.clear()
-                dateJsonArray.put(k,shortByDateJsonArray)
-                Log.d("SSA",dateJsonArray.toString())
-            }
-            var storeJsonObject=JSONObject()
-            storeJsonObject.put(value.name,dateJsonArray)
-
-            finalJson.put(storeJsonObject)
-        }
-        var clientJsonObject=JSONObject()
-        clientJsonObject.put("anant",finalJson)
-
-     Log.d("SSA",clientJsonObject.toString())
-
-        
-
-
-    }
     fun getExportedData(storeArrayList:ArrayList<SingleStore>){
         var name="Anant"
         var store="NautiyalJi"
@@ -187,19 +202,109 @@ lateinit var keyArray:ArrayList<String>;
             }//            finalJson.put(storeJsonObject)
             Log.d("SSA",innerJsonArray.toString())
         }
-        val output: JSONObject
         try {
 //            output = JSONObject(jsonString)
             val docs =innerJsonArray
-            val file = File("/tmp2/fromJSON.csv")
+            var path=Environment.getExternalStorageDirectory().absolutePath+"/MysteryShopper/"
+            val file = File(path)
+            if (!file.exists()) {
+                file.mkdirs()
+            }
             val csv: String = CDL.toString(docs)
+            var timeStamp=System.currentTimeMillis()
+            with(File(file,"excel-$timeStamp.csv")) {
+                writeBytes(csv.toByteArray())
+            }
+
+
             Log.d("SSA",csv)
-//            FileUtils.writeStringToFile(file, csv)
+//            fOut.write(csv.toByteArray()).also {
+//                Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
+//            }
+            Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
+//            fOut.flush()
+//            fOut.close()
         } catch (e: JSONException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==1805){
+            if(resultCode== Activity.RESULT_OK)
+            {
+                Toast.makeText(this,"Permission Accessed Now you can download data",Toast.LENGTH_SHORT).show()
+
+            }
+            else{
+                Toast.makeText(this,"Permission is required to download the data",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_store_option, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return when (item.itemId) {
+            R.id.action_downLoad -> {
+
+                if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED&& ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d("SSA","HERE")
+//                    getExportedData(arrayList)
+                    var intent=Intent(this@ShowStoreActivity,DownloadDataActivity::class.java)
+                    val gson = Gson()
+                    val jsonToSend = gson.toJson(arrayList)
+                    intent.putExtra("singleStore",jsonToSend)
+                    intent.putExtra("clientName",clientName)
+                    startActivity(intent)
+                }
+                else{
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE),1805)
+                }
+
+                return true
+            }
+            R.id.actionReset->{
+                var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
+                resetRef= dref.child(resources.getString(R.string.firebaseStore))
+                resetRef.addValueEventListener(object :ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                        Toast.makeText(this@ShowStoreActivity,"Failed, No internet Connectivity",Toast.LENGTH_SHORT).show()
+                        resetRef.removeEventListener(this)
+                    }
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for(snapshot in dataSnapshot.children){
+                            var storeModel=snapshot.getValue(SingleStore::class.java)
+                            if(storeModel!=null) {
+                                for ((index, element) in storeModel.AnsGiven.withIndex()) {
+                                    resetRef.child(snapshot.key.toString())
+                                        .child(resources.getString(R.string.ansGiven)).child(index.toString())
+                                        .child("shortedByDate").setValue(null)
+                                }
+                                resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0)
+                            }
+
+                            resetRef.removeEventListener(this)
+
+                        }
+                    }
+                })
+             return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

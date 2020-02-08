@@ -8,11 +8,13 @@
             android:layout_width="match_parent"
             app:cardCornerRadius="5dp"
             android:layout_margin="10dp"
+
             android:elevation="2dp"
             android:layout_height="wrap_content">
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="vertical"
-                      android:padding="5dp"
+                      android:padding="15dp"
+
                       android:layout_height="match_parent">
 
 
@@ -27,6 +29,8 @@
 
         <Button android:layout_width="match_parent"
                 android:id="@+id/btnGetDate"
+                android:background="@drawable/modified_circle_image_view"
+                android:text="Select Date"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>

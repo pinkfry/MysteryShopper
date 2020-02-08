@@ -49,7 +49,8 @@ class QuestionAddingActivity : AppCompatActivity() {
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total").setValue(
                         UpperAnsGivenModel(
-                            hashMapOf(), 1
+                            hashMapOf(), 1,
+                            etQuestion.text.toString()
                         )
                     )
                     total += 1
@@ -72,13 +73,12 @@ class QuestionAddingActivity : AppCompatActivity() {
                 Log.d("QAA",keyArray.toString())
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(),2))
+                        .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString()))
                     total += 1
                     dref.child("total").setValue(total)
                 }
-                etQuestion.setText("")
-                etOptions.setText("")
-                etValue.setText("")
+                etDateQuestion.setText("")
+
             }
         }
         btnAddTimeQuestions.setOnClickListener {
@@ -87,13 +87,12 @@ class QuestionAddingActivity : AppCompatActivity() {
                 clientRef.push().setValue(questionModels)
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 3))
+                        .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString()))
                     total += 1
                     dref.child("total").setValue(total)
                 }
-                etQuestion.setText("")
-                etOptions.setText("")
-                etValue.setText("")
+                etTimeQuestion.setText("")
+
             }
         }
         btnInputFieldQuestion.setOnClickListener {
@@ -102,13 +101,11 @@ class QuestionAddingActivity : AppCompatActivity() {
                 clientRef.push().setValue(questionModels)
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 4))
+                        .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString()))
                     total += 1
                     dref.child("total").setValue(total)
                 }
-                etQuestion.setText("")
-                etOptions.setText("")
-                etValue.setText("")
+                etInputFieldQuestion.setText("")
             }
         }
 

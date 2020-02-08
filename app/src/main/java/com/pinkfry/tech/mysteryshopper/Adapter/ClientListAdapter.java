@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.gson.Gson;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.SingleClient;
@@ -48,7 +49,9 @@ public static final String TAG="CLA";
                 Intent intent=new Intent(activity, ShowStoreActivity.class);
                 intent.putExtra("name",arrayList.get(position).getName());
                 intent.putExtra("total",arrayList.get(position).getTotal());
-                Log.d(TAG, "onClick: "+arrayList.get(position).getTotal());
+                Gson gson=new Gson();
+//                Log.d(TAG, "onClick: "+arrayList.get(position).getQuestions().size());
+//                Log.d(TAG, "onClick: "+arrayList.get(position).getTotal());
 
                 activity.startActivity(intent);
             }

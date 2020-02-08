@@ -7,8 +7,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Activity.ShowStoreActivity">
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
+           android:layout_marginTop="?attr/actionBarSize"
             android:id="@+id/rvStore"
             android:layout_marginBottom="60dp"
             android:layout_height="match_parent">
@@ -24,14 +38,24 @@
     <Button android:layout_width="wrap_content"
             android:layout_gravity="bottom|center"
             android:text="Add Questions"
+            android:gravity="center"
+            android:background="@drawable/modified_circle_image_view"
             android:id="@+id/btnAddQuestions"
             android:layout_margin="5dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:layout_height="50dp"/>
-    <Button android:layout_width="wrap_content"
-            android:text="Create JSON"
-            android:layout_gravity="bottom"
-            android:layout_margin="5dp"
-            android:id="@+id/btnCreateJson"
-            android:layout_height="wrap_content"/>
+    <!--<Button android:layout_width="wrap_content"-->
+            <!--android:text="Create JSON"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:id="@+id/btnCreateJson"-->
+            <!--android:layout_height="wrap_content"/>-->
+    <!--<Button android:layout_width="wrap_content"-->
+            <!--android:text="Reset ALl"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:id="@+id/btnResetAll"-->
+            <!--android:layout_height="wrap_content"/>-->
 
 </FrameLayout>
