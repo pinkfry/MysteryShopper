@@ -294,10 +294,17 @@ lateinit var keyArray:ArrayList<String>
                                         .child(resources.getString(R.string.ansGiven)).child(index.toString())
                                         .child("shortedByDate").setValue(null)
                                 }
-                                resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0)
+                                resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0).addOnSuccessListener {
+                                    Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
+
+                                }.addOnFailureListener {
+                                    Toast.makeText(this@ShowStoreActivity,"Reset Failed, It may be due to bad Internet Connectivity",Toast.LENGTH_SHORT).show()
+
+                                }
                             }
 
                             resetRef.removeEventListener(this)
+                            Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
 
                         }
                     }
