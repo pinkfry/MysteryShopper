@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity.Companion.total
 import com.pinkfry.tech.mysteryshopper.R
 import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel
 import com.pinkfry.tech.mysteryshopper.model.QuestionsModel
@@ -23,12 +24,13 @@ class AddNewStoreActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_new_store)
 
         val name=intent.getStringExtra("name")
-val total=intent.getIntExtra("total",0)
+
         val ansGiven=ArrayList<UpperAnsGivenModel>(total)
         var dref= FirebaseDatabase.getInstance().reference
         var childAddRef=dref.child(resources.getString(R.string.FirebaseClient)).child(name).child(resources.getString(R.string.firebaseStore))
         dref.child(resources.getString(R.string.FirebaseClient)).child(name).child("Questions").addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
+
             }
 
             override fun onDataChange(p0: DataSnapshot) {
@@ -36,8 +38,7 @@ val total=intent.getIntExtra("total",0)
                     var questionModel=snapshort.getValue(QuestionsModel::class.java)
                     if(questionModel!=null)
                     ansGiven.add(UpperAnsGivenModel(hashMapOf(),questionModel.type,questionModel.Question))
-                    progressAddStore.visibility= View.GONE
-                    linearAll.visibility=View.VISIBLE
+
                 }
             }
         })

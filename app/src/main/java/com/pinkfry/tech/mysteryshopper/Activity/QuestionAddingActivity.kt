@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
+import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity.Companion.total
 import com.pinkfry.tech.mysteryshopper.Adapter.OptionAdapter
 import com.pinkfry.tech.mysteryshopper.R
 import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel
@@ -23,7 +24,7 @@ class QuestionAddingActivity : AppCompatActivity() {
         var optionArrayList = ArrayList<OptionModels>()
         val clientName = intent.getStringExtra("clientName")
         val keyArray = intent.getStringArrayListExtra("keyArray")
-        var total = intent.getIntExtra("total", 0)
+//        var total = intent.getIntExtra("total", 0)
         val dref = FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient))
             .child(clientName)
         val clientRef = dref.child("Questions")
@@ -53,9 +54,10 @@ class QuestionAddingActivity : AppCompatActivity() {
                             etQuestion.text.toString()
                         )
                     )
-                    total += 1
-                    dref.child("total").setValue(total)
+
                 }
+                total += 1
+                dref.child("total").setValue(total)
                 etQuestion.setText("")
                 etOptions.setText("")
                 etValue.setText("")
@@ -74,9 +76,11 @@ class QuestionAddingActivity : AppCompatActivity() {
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
                         .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString()))
-                    total += 1
-                    dref.child("total").setValue(total)
+
                 }
+                total += 1
+                dref.child("total").setValue(total)
+
                 etDateQuestion.setText("")
 
             }
@@ -88,9 +92,10 @@ class QuestionAddingActivity : AppCompatActivity() {
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
                         .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString()))
-                    total += 1
-                    dref.child("total").setValue(total)
                 }
+                total += 1
+                dref.child("total").setValue(total)
+
                 etTimeQuestion.setText("")
 
             }
@@ -102,9 +107,11 @@ class QuestionAddingActivity : AppCompatActivity() {
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
                         .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString()))
-                    total += 1
-                    dref.child("total").setValue(total)
+
                 }
+                total += 1
+                dref.child("total").setValue(total)
+
                 etInputFieldQuestion.setText("")
             }
         }

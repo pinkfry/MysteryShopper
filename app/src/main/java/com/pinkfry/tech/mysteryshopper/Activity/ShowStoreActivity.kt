@@ -39,6 +39,9 @@ lateinit var keyArray:ArrayList<String>
     lateinit var arrayList:ArrayList<SingleStore>
     private lateinit var clientName:String
     lateinit var resetRef:DatabaseReference
+    companion object{
+        var total:Int = 0
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +49,7 @@ lateinit var keyArray:ArrayList<String>
 
         keyArray= ArrayList()
          clientName=intent.getStringExtra("name")!!
-        var total=intent.getIntExtra("total",0)
+         total=intent.getIntExtra("total",0)
         var questionList=intent.getStringExtra("questionList")
         var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
         toolbar.title = clientName
@@ -62,7 +65,7 @@ lateinit var keyArray:ArrayList<String>
         fabAddStore.setOnClickListener {
             val intent=Intent(this,AddNewStoreActivity::class.java)
             intent.putExtra("name",clientName)
-            intent.putExtra("total",total)
+
             startActivity(intent)
         }
 //        btnResetAll.setOnClickListener {
@@ -96,7 +99,7 @@ lateinit var keyArray:ArrayList<String>
                 var intent = Intent(this@ShowStoreActivity, QuestionAddingActivity::class.java)
                 intent.putExtra("clientName", clientName)
                 intent.putStringArrayListExtra("keyArray", keyArray)
-                intent.putExtra("total", total)
+
                 startActivity(intent)
             }
             else{
