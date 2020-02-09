@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-
 import com.pinkfry.tech.mysteryshopper.R
 import com.pinkfry.tech.mysteryshopper.model.ModelExportData
 import com.pinkfry.tech.mysteryshopper.model.QuestionsModel
@@ -23,8 +22,12 @@ import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.Type
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class DownloadDataActivity : AppCompatActivity() {
     lateinit var questionArrayList: ArrayList<QuestionsModel>
@@ -32,6 +35,7 @@ class DownloadDataActivity : AppCompatActivity() {
     lateinit var toDialog: DatePickerDialog
     lateinit var singleStoreList: ArrayList<SingleStore>
     lateinit var clientName: String
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download_data)
@@ -76,28 +80,25 @@ class DownloadDataActivity : AppCompatActivity() {
             toDialog.show()
         }
         btnDownloadData.setOnClickListener {
-            for (year in fromYear..toYear) {
-                if (toYear >= fromYear) {
-                    for (month in fromMonth..toMonth) {
-                        if (toMonth >= fromMonth) {
-                            for (day in fromDate..toDate) {
-                                if (toDate >= fromDate) {
-                                    dateArrayList.add("${day}${month}${year}")
-                                    Log.d("SSA", dateArrayList.toString())
-                                } else {
-                                    Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
-
-                                }
-                            }
-                        } else {
-                            Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } else {
-                    Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
-                }
+            dateArrayList.clear()
+            var startDate="$fromDate-$fromMonth-$fromYear";
+            var endDate="$toDate-$toMonth-$toYear"
+            getDates(startDate,endDate)
+            var simpledateFormat=SimpleDateFormat("d-m-yyyy")
+            var cal = Calendar.getInstance();
+            for( date in getDates(startDate,endDate)!!) {
+                cal.time = date
+                var formatedDate = "${cal.get(Calendar.DATE)}-${(cal.get(Calendar.MONTH) + 1)}-${cal.get(Calendar.YEAR)}"
+                Log.d("SSA", formatedDate)
+                dateArrayList.add(formatedDate)
             }
+
+            Log.d("SSA", dateArrayList.toString())
+            if (dateArrayList.isNotEmpty())
             getExportedData(singleStoreList,dateArrayList)
+            else {
+            Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
+        }
 //            getDataExported(singleStoreList, dateArrayList)
         }
     }
@@ -112,44 +113,7 @@ class DownloadDataActivity : AppCompatActivity() {
         var innerJsonArray = JSONArray()
         var stringarry = dateArray
         Log.d("SSA", "${storeArrayList.size}")
-//        for ((index, value) in storeArrayList.withIndex()) {
-//            var upperAnsGivenArrayList = value.AnsGiven
-//            store = value.name
-//            for (k in stringarry) {
-//                date = k
-//                for (i in 0 until upperAnsGivenArrayList.size) {
-//                    var ansGiven = storeArrayList[index].AnsGiven[i].shortedByDate[date]
-//
-//                    Log.d("SSA", ansGiven.toString())
-//                    if (ansGiven != null) {
-//                        for (element in ansGiven.ans) {
-//                            ans += "$element   *   "
-//                        }
-//                        ans += ansGiven.value
-//                    }
-//
-//                    question = storeArrayList[index].AnsGiven[i].question
-//                    arrayListOfData.add(ModelExportData(clientName, store, question, date, ans))
-//
-//                    ans = ""
-//                    Log.d("SSA", "${arrayListOfData.size}")
-//                }
-//
-//            }
-//
-//
-//        }
-//        for (model in arrayListOfData) {
-//            var innerJsonObject = JSONObject()
-//            innerJsonObject.put("clientName", model.clientName)
-//            innerJsonObject.put("storeName", model.storeName)
-//            innerJsonObject.put("question", model.question)
-//            innerJsonObject.put("date", model.date)
-//            innerJsonObject.put("ans", model.ans)
-//            innerJsonArray.put(innerJsonObject)
-//
-//        }
-
+        Log.d("SSA", "${stringarry.size} in date")
 
         if (storeArrayList.size > 0) {
             var upperAnsGivenArrayList = singleStoreList[0].AnsGiven.size
@@ -186,7 +150,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
                     }
 //
-
+                  if(jsonObject.length()!=0)
                     innerJsonArray.put(jsonObject)
 
                 }
@@ -194,7 +158,9 @@ class DownloadDataActivity : AppCompatActivity() {
 
             }
         }
+
         Log.d("SSA", innerJsonArray.toString())
+
         if(CDL.toString(innerJsonArray)!=null) {
             try {
                 val docs = innerJsonArray
@@ -280,5 +246,28 @@ class DownloadDataActivity : AppCompatActivity() {
             }
         }
         Log.d("DDA", innerJsonArray.toString())
+    }
+
+
+    private fun getDates(dateString1: String, dateString2: String): List<Date>? {
+        val dates = ArrayList<Date>()
+        val df1: DateFormat = SimpleDateFormat("d-M-yyyy")
+        var date1: Date? = null
+        var date2: Date? = null
+        try {
+            date1 = df1.parse(dateString1)
+            date2 = df1.parse(dateString2)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val cal1 = Calendar.getInstance()
+        cal1.time = date1
+        val cal2 = Calendar.getInstance()
+        cal2.time = date2
+        while (!cal1.after(cal2)) {
+            dates.add(cal1.time)
+            cal1.add(Calendar.DATE, 1)
+        }
+        return dates
     }
 }
