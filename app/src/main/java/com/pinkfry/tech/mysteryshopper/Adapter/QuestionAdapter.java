@@ -97,6 +97,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                    ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + (month+1) + "/" + year);
                    Log.d(TAG, "onDateSet: " + position);
+                   QuizShowActivity.ansArray.get(position).getAns().clear();
                    QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderDate) holder).btnGetDate.getText().toString());
                }
            };
@@ -123,6 +124,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     ((MyHolderTime) holder).btnGetTime.setText(hourOfDay + " : " + minute + " ");
+                    QuizShowActivity.ansArray.get(position).getAns().clear();
                     QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderTime) holder).btnGetTime.getText().toString());
 
                 }
@@ -151,6 +153,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ((MyHolderInput) holder).tvWriteSomething.setText(etAnswer.getText().toString());
+                            QuizShowActivity.ansArray.get(position).getAns().clear();
                             QuizShowActivity.ansArray.get(position).getAns().add(etAnswer.getText().toString());
                         }
                     })

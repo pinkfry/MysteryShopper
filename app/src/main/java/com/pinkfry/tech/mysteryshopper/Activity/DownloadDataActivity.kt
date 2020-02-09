@@ -207,7 +207,7 @@ class DownloadDataActivity : AppCompatActivity() {
                 var timeStamp = System.currentTimeMillis()
                 var calc = Calendar.getInstance()
                 var datetoday = "${calc.get(Calendar.DATE)}${calc.get(Calendar.MONTH) + 1}${calc.get(Calendar.YEAR)}"
-                with(File(file, "$clientName-$timeStamp.csv")) {
+                with(File(file, "$clientName-$datetoday-$timeStamp.csv")) {
 
                     writeBytes(csv.toByteArray())
                 }
@@ -216,7 +216,7 @@ class DownloadDataActivity : AppCompatActivity() {
                 Log.d("SSA", csv)
 
                 Toast.makeText(this, "Successfully Downloaded Data", Toast.LENGTH_SHORT).show()
-                tvLocation.text = "$path/excel-$datetoday-$timeStamp.csv/"
+                tvLocation.text = "$clientName-$datetoday-$timeStamp.csv"
             } catch (e: JSONException) {
                 e.printStackTrace()
             } catch (e: IOException) {
