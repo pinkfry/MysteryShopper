@@ -1,5 +1,7 @@
 package com.pinkfry.tech.mysteryshopper.Activity
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.DialogCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,17 +25,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
-
+lateinit var alertDialog: AlertDialog.Builder
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        createAlerDialog()
        rvClient.layoutManager= LinearLayoutManager(this@MainActivity)
         val arrayList=ArrayList<SingleClient>()
         var adapter= ClientListAdapter(arrayList,this@MainActivity)
         rvClient.adapter=adapter
         var dref=FirebaseDatabase.getInstance().reference
-        var clientRef=dref.child(resources.getString(R.string.FirebaseClient)).addValueEventListener(object: ValueEventListener{
+        var clientRef=dref.child(resources.getString(R.string.FirebaseClient))
+        clientRef.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -65,10 +71,26 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(this,"True",Toast.LENGTH_SHORT).show()
+            alertDialog.show()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    fun createAlerDialog(){
+         alertDialog=AlertDialog.Builder(this@MainActivity)
+            .setMessage("Do you want to delete all clients")
+            .setTitle("Reset")
+            .setPositiveButton("Reset"
+            ) { dialog, which ->
+                var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient))
+                .setValue(null)
+
+            }
+            .setNegativeButton("Cancel",object :DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                }
+            })
     }
 }

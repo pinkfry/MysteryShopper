@@ -95,7 +95,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
            DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                @Override
                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                   ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + month + "/" + year);
+                   ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + (month+1) + "/" + year);
                    Log.d(TAG, "onDateSet: " + position);
                    QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderDate) holder).btnGetDate.getText().toString());
                }

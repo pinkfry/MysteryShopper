@@ -1,6 +1,7 @@
 package com.pinkfry.tech.mysteryshopper.Activity
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +40,7 @@ class ShowStoreActivity : AppCompatActivity() {
 lateinit var keyArray:ArrayList<String>
     lateinit var arrayList:ArrayList<SingleStore>
     private lateinit var clientName:String
+    private lateinit var alertDialog: AlertDialog.Builder
     lateinit var resetRef:DatabaseReference
     companion object{
         var total:Int = 0
@@ -51,6 +54,7 @@ lateinit var keyArray:ArrayList<String>
          clientName=intent.getStringExtra("name")!!
          total=intent.getIntExtra("total",0)
         var questionList=intent.getStringExtra("questionList")
+        createAlerDialog()
         var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
         toolbar.title = clientName
           toolbar.inflateMenu(R.menu.menu_store_option)
@@ -58,7 +62,7 @@ lateinit var keyArray:ArrayList<String>
         window.statusBarColor= getColor(R.color.colorPrimaryDark)
           arrayList= ArrayList()
         var calendar=Calendar.getInstance();
-        var date="${calendar.get(Calendar.DATE)}${calendar.get(Calendar.MONTH)}${calendar.get(Calendar.YEAR)}"
+        var date="${calendar.get(Calendar.DATE)}${calendar.get(Calendar.MONTH)+1}${calendar.get(Calendar.YEAR)}"
         rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
         val adapter=ClientStoreAdapter(arrayList,this,clientName,total,date)
         rvStore.adapter=adapter
@@ -221,13 +225,10 @@ lateinit var keyArray:ArrayList<String>
 
 
             Log.d("SSA",csv)
-//            fOut.write(csv.toByteArray()).also {
-//                Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
-//            }
+
             Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
-//            fOut.flush()
-//            fOut.close()
-        } catch (e: JSONException) {
+
+        } catch (e: Exception) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -280,41 +281,62 @@ lateinit var keyArray:ArrayList<String>
                 return true
             }
             R.id.actionReset->{
-                var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
-                resetRef= dref.child(resources.getString(R.string.firebaseStore))
-                resetRef.addValueEventListener(object :ValueEventListener{
-                    override fun onCancelled(p0: DatabaseError) {
-                        Toast.makeText(this@ShowStoreActivity,"Failed, No internet Connectivity",Toast.LENGTH_SHORT).show()
-                        resetRef.removeEventListener(this)
-                    }
+                alertDialog.show()
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for(snapshot in dataSnapshot.children){
-                            var storeModel=snapshot.getValue(SingleStore::class.java)
-                            if(storeModel!=null) {
-                                for ((index, element) in storeModel.AnsGiven.withIndex()) {
-                                    resetRef.child(snapshot.key.toString())
-                                        .child(resources.getString(R.string.ansGiven)).child(index.toString())
-                                        .child("shortedByDate").setValue(null)
-                                }
-                                resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0).addOnSuccessListener {
-                                    Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
-
-                                }.addOnFailureListener {
-                                    Toast.makeText(this@ShowStoreActivity,"Reset Failed, It may be due to bad Internet Connectivity",Toast.LENGTH_SHORT).show()
-
-                                }
-                            }
-
-                            resetRef.removeEventListener(this)
-                            Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
-
-                        }
-                    }
-                })
              return true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    fun createAlerDialog(){
+        alertDialog= AlertDialog.Builder(this@ShowStoreActivity)
+            .setMessage("Do you want to delete all Store of this client")
+            .setTitle("Reset")
+            .setPositiveButton("Reset"
+            ) { dialog, which ->
+                resetData()
+
+            }
+            .setNegativeButton("Cancel",object : DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                }
+            })
+    }
+    fun resetData() {
+        var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
+        resetRef= dref.child(resources.getString(R.string.firebaseStore))
+        resetRef.addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                Toast.makeText(this@ShowStoreActivity,"Failed, No internet Connectivity",Toast.LENGTH_SHORT).show()
+                resetRef.removeEventListener(this)
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(snapshot in dataSnapshot.children){
+                    var storeModel=snapshot.getValue(SingleStore::class.java)
+                    if(storeModel!=null) {
+                        for ((index, element) in storeModel.AnsGiven.withIndex()) {
+                            resetRef.child(snapshot.key.toString())
+                                .child(resources.getString(R.string.ansGiven)).child(index.toString())
+                                .child("shortedByDate").setValue(null)
+                        }
+                        resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0).addOnSuccessListener {
+                            Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
+
+                        }.addOnFailureListener {
+                            Toast.makeText(this@ShowStoreActivity,"Reset Failed, It may be due to bad Internet Connectivity",Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+
+                    resetRef.removeEventListener(this)
+                    Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        })
+
+
     }
 }
