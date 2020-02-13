@@ -37,7 +37,7 @@ class AddNewStoreActivity : AppCompatActivity() {
                 for(snapshort in p0.children){
                     var questionModel=snapshort.getValue(QuestionsModel::class.java)
                     if(questionModel!=null)
-                    ansGiven.add(UpperAnsGivenModel(hashMapOf(),questionModel.type,questionModel.Question))
+                    ansGiven.add(UpperAnsGivenModel(hashMapOf(),questionModel.type,questionModel.Question,1))
 
                 }
             }

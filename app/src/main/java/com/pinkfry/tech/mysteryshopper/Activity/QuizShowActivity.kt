@@ -55,6 +55,7 @@ class QuizShowActivity : AppCompatActivity() {
         supportActionBar!!.title = storeName
         var dref= FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child("Questions")
             var questionArrayList=ArrayList<QuestionsModel>()
+        var questionKeyArrayList=ArrayList<String>()
 
 
         dref.addValueEventListener(object : ValueEventListener {
@@ -65,6 +66,7 @@ class QuizShowActivity : AppCompatActivity() {
                 questionArrayList.clear()
                 for(snapshot in dataSnapshot.children){
                     questionArrayList.add(snapshot.getValue(QuestionsModel::class.java)!!)
+                     questionKeyArrayList.add(snapshot.key.toString())
                     Log.d("QSA","$questionArrayList")
 
                 }
@@ -72,7 +74,8 @@ class QuizShowActivity : AppCompatActivity() {
                 {
                     ansArray.add(AnsGivenModel())
                 }
-                var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName)
+                var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
+                    questionKeyArrayList)
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
                 rvQuizQuestions.adapter=questionAdapter
 

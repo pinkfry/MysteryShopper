@@ -12,6 +12,8 @@
             android:roundIcon="@mipmap/logo_app"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".Activity.EditQuestionActivity">
+        </activity>
         <activity android:name=".Activity.DownloadDataActivity">
         </activity>
         <activity android:name=".Activity.QuestionAddingActivity">
@@ -20,9 +22,9 @@
         </activity>
         <activity android:name=".Activity.AddNewStoreActivity">
         </activity>
-        <activity android:name=".Activity.ShowStoreActivity"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        >
+        <activity
+                android:name=".Activity.ShowStoreActivity"
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity android:name=".Activity.AddClientActivity">
         </activity>

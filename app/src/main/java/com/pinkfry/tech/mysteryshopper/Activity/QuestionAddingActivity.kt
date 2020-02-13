@@ -45,13 +45,14 @@ class QuestionAddingActivity : AppCompatActivity() {
         }
         btnAddQuestions.setOnClickListener {
             if (etQuestion.text.toString().isNotEmpty()) {
-                var questionModels = QuestionsModel(etQuestion.text.toString(), optionArrayList, 1)
-                clientRef.push().setValue(questionModels)
+                var questionModels = QuestionsModel(etQuestion.text.toString(), optionArrayList, 1,1)
+                clientRef.child("$total").setValue(questionModels)
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total").setValue(
                         UpperAnsGivenModel(
                             hashMapOf(), 1,
-                            etQuestion.text.toString()
+                            etQuestion.text.toString(),
+                            1
                         )
                     )
 
@@ -70,12 +71,12 @@ class QuestionAddingActivity : AppCompatActivity() {
         }
         btnAddDateQuestions.setOnClickListener {
             if (etDateQuestion.text.toString().isNotEmpty()) {
-                var questionModels = QuestionsModel(etDateQuestion.text.toString(), ArrayList(), 2)
-                clientRef.push().setValue(questionModels)
+                var questionModels = QuestionsModel(etDateQuestion.text.toString(), ArrayList(), 2,1)
+                clientRef.child("$total").setValue(questionModels)
                 Log.d("QAA",keyArray.toString())
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString()))
+                        .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString(),1))
 
                 }
                 total += 1
@@ -87,11 +88,11 @@ class QuestionAddingActivity : AppCompatActivity() {
         }
         btnAddTimeQuestions.setOnClickListener {
             if (etTimeQuestion.text.toString().isNotEmpty()) {
-                var questionModels = QuestionsModel(etTimeQuestion.text.toString(), ArrayList(), 3)
-                clientRef.push().setValue(questionModels)
+                var questionModels = QuestionsModel(etTimeQuestion.text.toString(), ArrayList(), 3,1)
+                clientRef.child("$total").setValue(questionModels)
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString()))
+                        .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString(),1))
                 }
                 total += 1
                 dref.child("total").setValue(total)
@@ -102,11 +103,11 @@ class QuestionAddingActivity : AppCompatActivity() {
         }
         btnInputFieldQuestion.setOnClickListener {
             if (etInputFieldQuestion.text.toString().isNotEmpty()) {
-                var questionModels = QuestionsModel(etInputFieldQuestion.text.toString(), ArrayList(), 4)
-                clientRef.push().setValue(questionModels)
+                var questionModels = QuestionsModel(etInputFieldQuestion.text.toString(), ArrayList(), 4,1)
+                clientRef.child("$total").setValue(questionModels)
                 for (key in keyArray) {
                     keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString()))
+                        .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString(),1))
 
                 }
                 total += 1

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
+              android:id="@+id/linearQuestion"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <androidx.cardview.widget.CardView
@@ -11,11 +12,13 @@
             android:elevation="2dp"
             android:layout_height="wrap_content">
         <LinearLayout android:layout_width="match_parent"
-                      android:orientation="vertical"
                       android:padding="15dp"
                       android:layout_height="match_parent">
 
-
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:layout_weight="1"
+                          android:layout_height="wrap_content">
         <TextView android:layout_width="match_parent"
                   android:id="@+id/tvQuestion"
                   android:padding="5dp"
@@ -31,6 +34,12 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
+    <ImageView android:layout_width="30dp"
+               android:id="@+id/imageEditQuestion"
+               android:src="@drawable/ic_mode_edit"
+               android:layout_gravity="top"
+               android:layout_height="30dp"/>
+</LinearLayout>
     </androidx.cardview.widget.CardView>
 
 
