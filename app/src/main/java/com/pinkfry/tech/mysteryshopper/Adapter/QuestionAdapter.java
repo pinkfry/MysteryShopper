@@ -1,6 +1,7 @@
 package com.pinkfry.tech.mysteryshopper.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -37,12 +38,15 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     String clientName, storeName;
     ArrayList<String> questionKeyArrayList;
     DatabaseReference dref;
+    int questionNumber=0;
+    Activity activity;
 
 
-    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName,ArrayList<String> questionKeyArrayList) {
+    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName, ArrayList<String> questionKeyArrayList, Activity activity) {
         this.arrayList = arrayList;
         this.context = context;
         this.clientName = clientName;
+        this.activity=activity;
         this.storeName = storeName;
         this.questionKeyArrayList=questionKeyArrayList;
         dref = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.FirebaseClient)).child(clientName).child(context.getResources().getString(R.string.firebaseStore)).child(storeName).child(context.getResources().getString(R.string.ansGiven));
@@ -81,9 +85,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final QuestionsModel questionsModel = arrayList.get(position);
 
         if(questionsModel.getVisible()!=0) {
+            questionNumber++;
             Log.d(TAG, "onDateSet: " + position);
             if (questionsModel.getType() == 1) {
-                ((MyHolder) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+                ((MyHolder) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 int index = 0;
                 for (OptionModels option : questionsModel.getOptions()) {
 
@@ -94,6 +99,24 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         QuizShowActivity.ansArray.get(position).setValue(arrayList.get(position).getOptions().get(checkedId).getValue());
+                    }
+                });
+
+                ((MyHolder) holder).imageEditQuestion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(context, EditQuestionActivity.class);
+//                        intent.putExtra("key",questionKeyArrayList.get(position));
+                        Gson gson=new Gson();
+                        String json= gson.toJson(questionsModel);
+                        intent.putExtra("questionModel",json);
+                        intent.putExtra("clientName",clientName);
+                        intent.putExtra("storeName",storeName);
+                        intent.putExtra("position",position);
+                        context.startActivity(intent);
+                        activity.finish();
+
+
                     }
                 });
 
@@ -114,7 +137,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     dialog = new DatePickerDialog(context);
                     dialog.setOnDateSetListener(listener);
                 }
-                ((MyHolderDate) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+                ((MyHolderDate) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 final DatePickerDialog finalDialog = dialog;
                 ((MyHolderDate) holder).btnGetDate.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,7 +146,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     }
                 });
-                Log.d(TAG, "onBindViewHolder: " + ((MyHolderDate) holder).btnGetDate.getText().toString());
                 ((MyHolderDate) holder).imageEditQuestion.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,6 +158,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         intent.putExtra("storeName",storeName);
                         intent.putExtra("position",position);
                         context.startActivity(intent);
+                        activity.finish();
+
 
                     }
                 });
@@ -152,7 +176,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 };
 
                 final TimePickerDialog timePicker = new TimePickerDialog(context, listener, 0, 0, true);
-                ((MyHolderTime) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+                ((MyHolderTime) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 ((MyHolderTime) holder).btnGetTime.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,10 +184,27 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         timePicker.show();
                     }
                 });
+                ((MyHolderTime) holder).imageEditQuestion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(context, EditQuestionActivity.class);
+//                        intent.putExtra("key",questionKeyArrayList.get(position));
+                        Gson gson=new Gson();
+                        String json= gson.toJson(questionsModel);
+                        intent.putExtra("questionModel",json);
+                        intent.putExtra("clientName",clientName);
+                        intent.putExtra("storeName",storeName);
+                        intent.putExtra("position",position);
+                        context.startActivity(intent);
+                        activity.finish();
+
+
+                    }
+                });
 
 
             } else if (questionsModel.getType() == 4) {
-                ((MyHolderInput) holder).etQuestion.setText(position + 1 + ". " + questionsModel.getQuestion());
+                ((MyHolderInput) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 @SuppressLint("InflateParams") View view = li.inflate(R.layout.dialogue_add_text, null, false);
                 final EditText etAnswer = view.findViewById(R.id.etAnswer);
@@ -190,12 +231,29 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         alertDialog.show();
                     }
                 });
+                ((MyHolderInput) holder).imageEditQuestion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(context, EditQuestionActivity.class);
+//                        intent.putExtra("key",questionKeyArrayList.get(position));
+                        Gson gson=new Gson();
+                        String json= gson.toJson(questionsModel);
+                        intent.putExtra("questionModel",json);
+                        intent.putExtra("clientName",clientName);
+                        intent.putExtra("storeName",storeName);
+                        intent.putExtra("position",position);
+                        context.startActivity(intent);
+                        activity.finish();
+
+
+                    }
+                });
 
 
             }
         }
         else{
-            holder.itemView.findViewById(R.id.linearQuestion).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.linearQuestion).setLayoutParams(new LinearLayout.LayoutParams(0,0));
         }
     }
 

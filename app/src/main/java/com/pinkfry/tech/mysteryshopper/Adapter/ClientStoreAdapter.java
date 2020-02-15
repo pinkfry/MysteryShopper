@@ -1,7 +1,9 @@
 package com.pinkfry.tech.mysteryshopper.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.pinkfry.tech.mysteryshopper.Activity.QuizShowActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
@@ -30,6 +34,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     int total;
     int []colorArray;
     String date;
+    private AlertDialog.Builder alertDialog;
     public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName,int total,String date) {
         this.arrayList = arrayList;
         this.activity=activity;
@@ -56,6 +61,16 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
 
         holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven())));
         holder.tvAvatar.setText(singleStore.getName().substring(0,2).toUpperCase());
+        holder.linearSingleStore.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                showAlertDialogBox(singleStore.getName(),position);
+                alertDialog.show();
+
+                return true;
+            }
+        });
         holder.tvAvatar.setBackgroundTintList(ColorStateList.valueOf(colorArray[new Random().nextInt(5)]));
         holder.linearSingleStore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,5 +115,27 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
         }
         return  ans;
 
+    }
+    void showAlertDialogBox(final String storeName, final int position){
+        alertDialog= new AlertDialog.Builder(activity)
+            .setMessage("Do you want to delete "+storeName)
+                .setTitle("Delete Store")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseReference dref=FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient)).child(clientName);
+                        dref.child(activity.getResources().getString(R.string.firebaseStore)).child(storeName).setValue(null);
+                        arrayList.remove(position);
+                        notifyDataSetChanged();
+                    }
+                })
+
+
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
     }
 }

@@ -3,6 +3,7 @@ package com.pinkfry.tech.mysteryshopper.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +32,10 @@ class QuestionAddingActivity : AppCompatActivity() {
         val keyRef = dref.child(resources.getString(R.string.firebaseStore))
         rvOptions.layoutManager = LinearLayoutManager(this)
         var optionAdapter = OptionAdapter(optionArrayList)
+        btnDeleteDateQuestion.visibility= View.GONE
+        btnDeleteQuestion.visibility=View.GONE
+        btnDeleteTimeQuestion.visibility=View.GONE
+        btnDeleteInputQuestion.visibility=View.GONE
         rvOptions.adapter = optionAdapter
         btnAddOptions.setOnClickListener {
             if (etOptions.text.toString().isNotEmpty() && etValue.text.toString().isNotEmpty()) {

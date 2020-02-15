@@ -75,7 +75,7 @@ class QuizShowActivity : AppCompatActivity() {
                     ansArray.add(AnsGivenModel())
                 }
                 var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
-                    questionKeyArrayList)
+                    questionKeyArrayList,this@QuizShowActivity)
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
                 rvQuizQuestions.adapter=questionAdapter
 

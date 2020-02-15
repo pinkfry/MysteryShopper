@@ -40,6 +40,13 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionAdapter.MyHolder> 
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
         holder.tvOptionName.setText(arrayList.get(position).getOption());
         holder.tvNumber.setText((position+1)+". ");
+        holder.imageDeleteOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayList.remove(position);
+                notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -50,9 +57,11 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionAdapter.MyHolder> 
 
     class MyHolder extends RecyclerView.ViewHolder {
         TextView tvOptionName,tvNumber;
+        ImageView imageDeleteOption;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
+            imageDeleteOption=itemView.findViewById(R.id.imageDeleteOption);
             tvOptionName=itemView.findViewById(R.id.tvOptionName);
            tvNumber=itemView.findViewById(R.id.tvNumber);
 

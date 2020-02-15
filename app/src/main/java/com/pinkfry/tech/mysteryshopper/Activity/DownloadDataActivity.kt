@@ -58,17 +58,17 @@ class DownloadDataActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dialog = DatePickerDialog(this)
             dialog.setOnDateSetListener { view, year, month, dayOfMonth ->
-                tvFromDate.text = "${dayOfMonth}/${month+1}/${year}"
+                tvFromDate.text = "${dayOfMonth}/${month + 1}/${year}"
                 fromDate = dayOfMonth
-                fromMonth = month+1
+                fromMonth = month + 1
                 fromYear = year
                 Log.d("DDA", tvToDate.text.toString())
             }
             toDialog = DatePickerDialog(this)
             toDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
-                tvToDate.text = "${dayOfMonth}/${month+1}/${year}"
+                tvToDate.text = "${dayOfMonth}/${month + 1}/${year}"
                 toDate = dayOfMonth
-                toMonth = month+1
+                toMonth = month + 1
                 toYear = year
                 Log.d("DDA", tvToDate.text.toString())
             }
@@ -81,24 +81,25 @@ class DownloadDataActivity : AppCompatActivity() {
         }
         btnDownloadData.setOnClickListener {
             dateArrayList.clear()
-            var startDate="$fromDate-$fromMonth-$fromYear";
-            var endDate="$toDate-$toMonth-$toYear"
-            getDates(startDate,endDate)
-            var simpledateFormat=SimpleDateFormat("d-m-yyyy")
+            var startDate = "$fromDate-$fromMonth-$fromYear";
+            var endDate = "$toDate-$toMonth-$toYear"
+            getDates(startDate, endDate)
+            var simpledateFormat = SimpleDateFormat("d-m-yyyy")
             var cal = Calendar.getInstance();
-            for( date in getDates(startDate,endDate)!!) {
+            for (date in getDates(startDate, endDate)!!) {
                 cal.time = date
-                var formatedDate = "${cal.get(Calendar.DATE)}-${(cal.get(Calendar.MONTH) + 1)}-${cal.get(Calendar.YEAR)}"
+                var formatedDate =
+                    "${cal.get(Calendar.DATE)}-${(cal.get(Calendar.MONTH) + 1)}-${cal.get(Calendar.YEAR)}"
                 Log.d("SSA", formatedDate)
                 dateArrayList.add(formatedDate)
             }
 
             Log.d("SSA", dateArrayList.toString())
             if (dateArrayList.isNotEmpty())
-            getExportedData(singleStoreList,dateArrayList)
+                getExportedData(singleStoreList, dateArrayList)
             else {
-            Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
-        }
+                Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
+            }
 //            getDataExported(singleStoreList, dateArrayList)
         }
     }
@@ -117,6 +118,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
         if (storeArrayList.size > 0) {
             var upperAnsGivenArrayList = singleStoreList[0].AnsGiven.size
+
             for (k in stringarry) {
 
                 for (i in 0 until upperAnsGivenArrayList) {
@@ -125,33 +127,36 @@ class DownloadDataActivity : AppCompatActivity() {
 
 
                     for ((index, value) in storeArrayList.withIndex()) {
+
                         store = value.name
                         var ansGiven = storeArrayList[index].AnsGiven[i].shortedByDate[date]
 
 //                    Log.d("SSA", ansGiven.toString())
-                        if (ansGiven != null) {
-                            jsonObject.put("Date", date)
-                            jsonObject.put("question", storeArrayList[index].AnsGiven[i].question)
+                        if (storeArrayList[index].AnsGiven[i].visible != 0) {
+                            if (ansGiven != null) {
+                                jsonObject.put("Date", date)
+                                jsonObject.put("question", storeArrayList[index].AnsGiven[i].question)
 
-                            for (element in ansGiven.ans) {
-                                ans += "$element   *   "
-                            }
-                            ans += ansGiven.value
+                                for (element in ansGiven.ans) {
+                                    ans += "$element   *   "
+                                }
+                                ans += ansGiven.value
 
 
 //                    question =
 //                    arrayListOfData.add(ModelExportData(clientName, store, question, date, ans))
 
-                            jsonObject.put(store, ans)
-                            ans = ""
-                            Log.d("SSA", "${arrayListOfData.size}")
+                                jsonObject.put(store, ans)
+                                ans = ""
+                                Log.d("SSA", "${arrayListOfData.size}")
 
+                            }
                         }
 
                     }
 //
-                  if(jsonObject.length()!=0)
-                    innerJsonArray.put(jsonObject)
+                    if (jsonObject.length() != 0)
+                        innerJsonArray.put(jsonObject)
 
                 }
 
@@ -161,7 +166,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
         Log.d("SSA", innerJsonArray.toString())
 
-        if(CDL.toString(innerJsonArray)!=null) {
+        if (CDL.toString(innerJsonArray) != null) {
             try {
                 val docs = innerJsonArray
                 var path = Environment.getExternalStorageDirectory().absolutePath + "/MysteryShopper/"
@@ -188,7 +193,7 @@ class DownloadDataActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-        }else{
+        } else {
             Toast.makeText(this, "The data is totally empty, Nothing to download", Toast.LENGTH_SHORT).show()
 
         }
@@ -238,7 +243,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
                     }
 
-                        innerJsonArray.put(jsonObject)
+                    innerJsonArray.put(jsonObject)
 
                 }
 
