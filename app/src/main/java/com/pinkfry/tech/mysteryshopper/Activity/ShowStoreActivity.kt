@@ -62,7 +62,7 @@ lateinit var keyArray:ArrayList<String>
         window.statusBarColor= getColor(R.color.colorPrimaryDark)
           arrayList= ArrayList()
         var calendar=Calendar.getInstance();
-        var date="${calendar.get(Calendar.DATE)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.YEAR)}"
+        var date="${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)}"
         rvStore.layoutManager= LinearLayoutManager(this) as RecyclerView.LayoutManager?
         val adapter=ClientStoreAdapter(arrayList,this@ShowStoreActivity,clientName,total,date)
         rvStore.adapter=adapter

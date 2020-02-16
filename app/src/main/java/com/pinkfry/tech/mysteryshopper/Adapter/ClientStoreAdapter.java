@@ -60,7 +60,13 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
         holder.tvPhoneNo.setText(singleStore.getPhoneNo());
 
         holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven())));
+        if(singleStore.getName().length()>=2)
         holder.tvAvatar.setText(singleStore.getName().substring(0,2).toUpperCase());
+        else
+        {
+            holder.tvAvatar.setText(singleStore.getName().toUpperCase());
+
+        }
         holder.linearSingleStore.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

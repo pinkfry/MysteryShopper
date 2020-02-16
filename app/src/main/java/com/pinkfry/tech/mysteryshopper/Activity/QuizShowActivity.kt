@@ -25,7 +25,9 @@ class QuizShowActivity : AppCompatActivity() {
         lateinit var ansToSendArrayList:ArrayList<AnsGivenModel>
         lateinit var arraylistGot:ArrayList<UpperAnsGivenModel>
         lateinit var ansArray: ArrayList<AnsGivenModel>
+        lateinit var lastResponseList:ArrayList<AnsGivenModel>
         lateinit var date:String
+        var latestDate="2019-2-16"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +53,7 @@ class QuizShowActivity : AppCompatActivity() {
             Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
         }
         ansArray= ArrayList()
+        lastResponseList=ArrayList()
 
         supportActionBar!!.title = storeName
         var dref= FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child("Questions")
@@ -75,12 +78,37 @@ class QuizShowActivity : AppCompatActivity() {
                     ansArray.add(AnsGivenModel())
                 }
                 var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
-                    questionKeyArrayList,this@QuizShowActivity)
+                    this@QuizShowActivity,null)
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
                 rvQuizQuestions.adapter=questionAdapter
 
             }
         })
+
+        btnEditPreviousResponse.setOnClickListener {
+           val dbref = FirebaseDatabase.getInstance().reference
+                .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
+                .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
+                    dbref.child(resources.getString(R.string.ansGiven)).addValueEventListener(object:ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        Log.d("QSA","here")
+                        for(snapshot in p0.children) {
+                            Log.d("QSA", snapshot.getValue(UpperAnsGivenModel::class.java).toString())
+                            lastResponseList.add(getLastResponse(snapshot.getValue(UpperAnsGivenModel::class.java)?.shortedByDate!!))
+                        }
+                        ansArray=lastResponseList
+                        val questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
+                            this@QuizShowActivity,
+                            lastResponseList)
+                        rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
+                        rvQuizQuestions.adapter=questionAdapter
+                        dbref.removeEventListener(this)
+                    }
+                })
+        }
         btnSubmit.setOnClickListener {
             dref = FirebaseDatabase.getInstance().reference
                 .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
@@ -105,5 +133,18 @@ class QuizShowActivity : AppCompatActivity() {
            arraylistGot[index].shortedByDate[date] = ansGivenModel
        }
         return arraylistGot
+    }
+    fun getLastResponse(shortedByDate:HashMap<String,AnsGivenModel>): AnsGivenModel{
+        latestDate="2019-2-16"
+        for(element in shortedByDate.keys)
+        {
+            if(element.compareTo(latestDate)==1)
+            latestDate=element
+        }
+        Log.d("QSA", latestDate)
+        return if(shortedByDate[latestDate]!=null)
+            shortedByDate[latestDate]!!
+        else
+            AnsGivenModel()
     }
 }

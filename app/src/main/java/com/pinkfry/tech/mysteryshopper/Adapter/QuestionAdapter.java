@@ -36,19 +36,19 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     ArrayList<QuestionsModel> arrayList;
     Context context;
     String clientName, storeName;
-    ArrayList<String> questionKeyArrayList;
+    ArrayList<AnsGivenModel> listPreviousAns;
     DatabaseReference dref;
     int questionNumber=0;
     Activity activity;
 
 
-    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName, ArrayList<String> questionKeyArrayList, Activity activity) {
+    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName, Activity activity,ArrayList<AnsGivenModel> listPreviousAns) {
         this.arrayList = arrayList;
         this.context = context;
         this.clientName = clientName;
         this.activity=activity;
+        this.listPreviousAns=listPreviousAns;
         this.storeName = storeName;
-        this.questionKeyArrayList=questionKeyArrayList;
         dref = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.FirebaseClient)).child(clientName).child(context.getResources().getString(R.string.firebaseStore)).child(storeName).child(context.getResources().getString(R.string.ansGiven));
 
     }
@@ -88,6 +88,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             questionNumber++;
             Log.d(TAG, "onDateSet: " + position);
             if (questionsModel.getType() == 1) {
+
                 ((MyHolder) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 int index = 0;
                 for (OptionModels option : questionsModel.getOptions()) {
@@ -121,6 +122,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
             } else if (questionsModel.getType() == 2) {
+                if(listPreviousAns!=null && listPreviousAns.size()!=0){
+                    int size=listPreviousAns.get(position).getAns().size();
+                    ((MyHolderDate)holder).btnGetDate.setText(listPreviousAns.get(position).getAns().get(size-1));
+                }
                 DatePickerDialog dialog = null;
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -165,6 +170,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
             } else if (questionsModel.getType() == 3) {
+                if(listPreviousAns!=null && listPreviousAns.size()!=0){
+                    int size=listPreviousAns.get(position).getAns().size();
+                    ((MyHolderTime)holder).btnGetTime.setText(listPreviousAns.get(position).getAns().get(size-1));
+                }
                 TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -204,6 +213,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
             } else if (questionsModel.getType() == 4) {
+
+                if(listPreviousAns!=null && listPreviousAns.size()!=0){
+                    int size=listPreviousAns.get(position).getAns().size();
+                    ((MyHolderInput)holder).tvWriteSomething.setText(listPreviousAns.get(position).getAns().get(size-1));
+                }
                 ((MyHolderInput) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 @SuppressLint("InflateParams") View view = li.inflate(R.layout.dialogue_add_text, null, false);

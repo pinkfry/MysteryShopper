@@ -81,15 +81,14 @@ class DownloadDataActivity : AppCompatActivity() {
         }
         btnDownloadData.setOnClickListener {
             dateArrayList.clear()
-            var startDate = "$fromDate-$fromMonth-$fromYear";
-            var endDate = "$toDate-$toMonth-$toYear"
-            getDates(startDate, endDate)
-            var simpledateFormat = SimpleDateFormat("d-m-yyyy")
+            var startDate = "$fromYear-$fromMonth-$fromDate"
+            var endDate = "$toYear-$toMonth-$toDate"
+//            getDates(startDate, endDate)
             var cal = Calendar.getInstance();
             for (date in getDates(startDate, endDate)!!) {
                 cal.time = date
                 var formatedDate =
-                    "${cal.get(Calendar.DATE)}-${(cal.get(Calendar.MONTH) + 1)}-${cal.get(Calendar.YEAR)}"
+                    "${cal.get(Calendar.YEAR)}-${(cal.get(Calendar.MONTH) + 1)}-${cal.get(Calendar.DATE)}"
                 Log.d("SSA", formatedDate)
                 dateArrayList.add(formatedDate)
             }
@@ -256,7 +255,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
     private fun getDates(dateString1: String, dateString2: String): List<Date>? {
         val dates = ArrayList<Date>()
-        val df1: DateFormat = SimpleDateFormat("d-M-yyyy")
+        val df1: DateFormat = SimpleDateFormat("yyyy-M-d")
         var date1: Date? = null
         var date2: Date? = null
         try {

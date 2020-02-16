@@ -1,16 +1,21 @@
 package com.pinkfry.tech.mysteryshopper.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
@@ -22,6 +27,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     ArrayList<SingleClient> arrayList;
     Activity activity;
     int  []imagesArray;
+    private AlertDialog.Builder alertDialog;
 public static final String TAG="CLA";
     public ClientListAdapter(ArrayList<SingleClient> arrayList, Activity activity) {
         this.arrayList = arrayList;
@@ -43,7 +49,8 @@ public static final String TAG="CLA";
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
         holder.tvClientName.setText(arrayList.get(position).getName());
         holder.imageAvtar.setImageResource(imagesArray[arrayList.get(position).getImagePosition()]);
-        holder.tvClientName.setOnClickListener(new View.OnClickListener() {
+
+        holder.linearSingleClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(activity, ShowStoreActivity.class);
@@ -56,6 +63,17 @@ public static final String TAG="CLA";
                 activity.startActivity(intent);
             }
         });
+
+        holder.linearSingleClient.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                showAlertDialogBox(arrayList.get(position).getName(),position);
+                alertDialog.show();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -65,12 +83,35 @@ public static final String TAG="CLA";
 
     class MyHolder extends RecyclerView.ViewHolder {
         TextView tvClientName;
+        LinearLayout linearSingleClient;
         ImageView imageAvtar;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
-
+            linearSingleClient=itemView.findViewById(R.id.linearSingleClient);
             tvClientName=itemView.findViewById(R.id.tvClientName);
             imageAvtar=itemView.findViewById(R.id.imageAvtar);
         }
+    }
+    void showAlertDialogBox(final String clientName, final int position){
+        alertDialog= new AlertDialog.Builder(activity)
+                .setMessage("Do you want to delete "+clientName)
+                .setTitle("Delete Client")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseReference dref= FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient)).child(clientName);
+                        dref.setValue(null);
+                        arrayList.remove(position);
+                        notifyDataSetChanged();
+                    }
+                })
+
+
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
     }
 }
