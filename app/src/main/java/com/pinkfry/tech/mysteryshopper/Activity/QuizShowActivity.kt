@@ -95,11 +95,12 @@ class QuizShowActivity : AppCompatActivity() {
 
                     override fun onDataChange(p0: DataSnapshot) {
                         Log.d("QSA","here")
+                        ansToSendArrayList= ArrayList()
                         for(snapshot in p0.children) {
                             Log.d("QSA", snapshot.getValue(UpperAnsGivenModel::class.java).toString())
                             lastResponseList.add(getLastResponse(snapshot.getValue(UpperAnsGivenModel::class.java)?.shortedByDate!!))
                         }
-                        ansArray=lastResponseList
+//                        ansArray=lastResponseList
                         val questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
                             this@QuizShowActivity,
                             lastResponseList)
@@ -136,10 +137,19 @@ class QuizShowActivity : AppCompatActivity() {
     }
     fun getLastResponse(shortedByDate:HashMap<String,AnsGivenModel>): AnsGivenModel{
         latestDate="2019-2-16"
+
         for(element in shortedByDate.keys)
         {
             if(element.compareTo(latestDate)==1)
             latestDate=element
+
+        }
+        date= latestDate
+        if(shortedByDate[latestDate]==null){
+            ansToSendArrayList.add(AnsGivenModel())
+        }
+        else {
+            shortedByDate[latestDate]?.let { ansToSendArrayList.add(it) }
         }
         Log.d("QSA", latestDate)
         return if(shortedByDate[latestDate]!=null)
