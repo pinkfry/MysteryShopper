@@ -27,6 +27,7 @@ import com.pinkfry.tech.mysteryshopper.model.SingleStore;
 import com.pinkfry.tech.mysteryshopper.model.UpperAnsGivenModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.MyHolder> {
@@ -62,7 +63,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
         holder.tvAddress.setText(singleStore.getAddress());
         holder.tvPhoneNo.setText(singleStore.getPhoneNo());
 
-        holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven().get(date))));
+        holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven())));
         if(singleStore.getName().length()>=2)
         holder.tvAvatar.setText(singleStore.getName().substring(0,2).toUpperCase());
         else
@@ -116,12 +117,14 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
 
         }
     }
-    int getToatalScore(ArrayList<SIngleResponseModel> ansList){
+    int getToatalScore(HashMap<String,ArrayList<SIngleResponseModel>> ansList){
         int ans=0;
         if(ansList!=null)
-        for(SIngleResponseModel element: ansList){
-            for(AnsGivenModel value: element.getEachAns()){
-                ans+=value.getValue();
+        for(HashMap.Entry<String,ArrayList<SIngleResponseModel>> upperElement: ansList.entrySet()){
+            for(SIngleResponseModel element : upperElement.getValue()) {
+                for (AnsGivenModel value : element.getEachAns()) {
+                    ans += value.getValue();
+                }
             }
         }
         return  ans;

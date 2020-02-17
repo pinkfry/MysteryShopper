@@ -139,6 +139,7 @@ this.sIngleResponseModel=sIngleResponseModel;
             } else if (questionsModel.getType() == 2) {
                 if(sIngleResponseModel!=null && sIngleResponseModel.getEachAns().size()>position) {
                     String ans = sIngleResponseModel.getEachAns().get(position).getAns();
+                    if(ans.length()!=0)
                     ((MyHolderDate) holder).btnGetDate.setText(ans);
                 }
                 DatePickerDialog dialog = null;
@@ -188,6 +189,7 @@ this.sIngleResponseModel=sIngleResponseModel;
             } else if (questionsModel.getType() == 3) {
                 if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position){
                     String ans=sIngleResponseModel.getEachAns().get(position).getAns();
+                    if(ans.length()!=0)
                     ((MyHolderTime)holder).btnGetTime.setText(ans);
                 }
                 TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
@@ -231,6 +233,7 @@ this.sIngleResponseModel=sIngleResponseModel;
             } else if (questionsModel.getType() == 4) {
                 if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position) {
                     String ans = sIngleResponseModel.getEachAns().get(position).getAns();
+                    if(ans.length()!=0)
                     ((MyHolderInput) holder).tvWriteSomething.setText(ans);
                 }
                 ((MyHolderInput) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
