@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.pinkfry.tech.mysteryshopper.Activity.QuizShowActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel;
+import com.pinkfry.tech.mysteryshopper.model.SIngleResponseModel;
 import com.pinkfry.tech.mysteryshopper.model.SingleStore;
 import com.pinkfry.tech.mysteryshopper.model.UpperAnsGivenModel;
 
@@ -33,6 +35,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     String clientName;
     int total;
     int []colorArray;
+    public static final String TAG="CSA";
     String date;
     private AlertDialog.Builder alertDialog;
     public ClientStoreAdapter(ArrayList<SingleStore> arrayList, Activity activity, String clientName,int total,String date) {
@@ -59,7 +62,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
         holder.tvAddress.setText(singleStore.getAddress());
         holder.tvPhoneNo.setText(singleStore.getPhoneNo());
 
-        holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven())));
+        holder.tvScore.setText(String.valueOf(getToatalScore(singleStore.getAnsGiven().get(date))));
         if(singleStore.getName().length()>=2)
         holder.tvAvatar.setText(singleStore.getName().substring(0,2).toUpperCase());
         else
@@ -87,8 +90,8 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
                 intent.putExtra("clientName",clientName);
                 intent.putExtra("totalClient",singleStore.getTotalClient());
                 Gson gson=new Gson();
-                String jsonToSend=gson.toJson(singleStore.getAnsGiven());
-                intent.putExtra("ansToSend",jsonToSend);
+                String jsonToSend=gson.toJson(singleStore.getAnsGiven().get(date));
+                intent.putExtra("ansToSend", jsonToSend);
                 activity.startActivity(intent);
             }
         });
@@ -113,11 +116,13 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
 
         }
     }
-    int getToatalScore(ArrayList<UpperAnsGivenModel> ansList){
+    int getToatalScore(ArrayList<SIngleResponseModel> ansList){
         int ans=0;
-        for(UpperAnsGivenModel value: ansList){
-            if(value.getShortedByDate().get(date)!=null)
-            ans+=value.getShortedByDate().get(date).getValue();
+        if(ansList!=null)
+        for(SIngleResponseModel element: ansList){
+            for(AnsGivenModel value: element.getEachAns()){
+                ans+=value.getValue();
+            }
         }
         return  ans;
 

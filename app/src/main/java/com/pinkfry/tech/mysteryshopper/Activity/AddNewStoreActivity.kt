@@ -28,20 +28,20 @@ class AddNewStoreActivity : AppCompatActivity() {
         val ansGiven=ArrayList<UpperAnsGivenModel>(total)
         var dref= FirebaseDatabase.getInstance().reference
         var childAddRef=dref.child(resources.getString(R.string.FirebaseClient)).child(name).child(resources.getString(R.string.firebaseStore))
-        dref.child(resources.getString(R.string.FirebaseClient)).child(name).child("Questions").addValueEventListener(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                for(snapshort in p0.children){
-                    var questionModel=snapshort.getValue(QuestionsModel::class.java)
-                    if(questionModel!=null)
-                    ansGiven.add(UpperAnsGivenModel(hashMapOf(),questionModel.type,questionModel.Question,1))
-
-                }
-            }
-        })
+//        dref.child(resources.getString(R.string.FirebaseClient)).child(name).child("Questions").addValueEventListener(object :ValueEventListener{
+//            override fun onCancelled(p0: DatabaseError) {
+//
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                for(snapshort in p0.children){
+//                    var questionModel=snapshort.getValue(QuestionsModel::class.java)
+//                    if(questionModel!=null)
+//                    ansGiven.add(UpperAnsGivenModel(hashMapOf(),questionModel.type,questionModel.Question,1))
+//
+//                }
+//            }
+//        })
         btnAddStore.setOnClickListener {
             val name=etStoreName.text.toString()
             val address=etAddress.text.toString()
@@ -51,7 +51,7 @@ class AddNewStoreActivity : AppCompatActivity() {
                 for( a in 1..total)
 
                 Log.d("ANSA",ansGiven.toString())
-                val responseGiven=ResponseGiven(ansGiven,name,address,phone)
+                val responseGiven=ResponseGiven(name,address,phone)
                 childAddRef.child(name).setValue(responseGiven).addOnSuccessListener {
                     etStoreName.setText("")
                     etAddress.setText("")

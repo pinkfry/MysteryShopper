@@ -35,6 +35,7 @@ class DownloadDataActivity : AppCompatActivity() {
     lateinit var toDialog: DatePickerDialog
     lateinit var singleStoreList: ArrayList<SingleStore>
     lateinit var clientName: String
+     var total:Int=0
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
         var singleStoreJSON = intent.getStringExtra("singleStore")
         clientName = intent.getStringExtra("clientName")!!
+        total=intent.getIntExtra("total",0);
         val gson = Gson()
 
 
@@ -116,48 +118,44 @@ class DownloadDataActivity : AppCompatActivity() {
         Log.d("SSA", "${stringarry.size} in date")
 
         if (storeArrayList.size > 0) {
-            var upperAnsGivenArrayList = singleStoreList[0].AnsGiven.size
-
+            Log.d("DDA",storeArrayList.toString())
             for (k in stringarry) {
 
+           var upperAnsGivenArrayList = total
                 for (i in 0 until upperAnsGivenArrayList) {
+
                     var jsonObject = JSONObject()
-                    date = k
 
-
-                    for ((index, value) in storeArrayList.withIndex()) {
-
-                        store = value.name
-                        var ansGiven = storeArrayList[index].AnsGiven[i].shortedByDate[date]
-
-//                    Log.d("SSA", ansGiven.toString())
-                        if (storeArrayList[index].AnsGiven[i].visible != 0) {
-                            if (ansGiven != null) {
-                                jsonObject.put("Date", date)
-                                jsonObject.put("question", storeArrayList[index].AnsGiven[i].question)
-
-                                for (element in ansGiven.ans) {
-                                    ans += "$element   *   "
-                                }
-                                ans += ansGiven.value
-
-
-//                    question =
-//                    arrayListOfData.add(ModelExportData(clientName, store, question, date, ans))
-
-                                jsonObject.put(store, ans)
-                                ans = ""
-                                Log.d("SSA", "${arrayListOfData.size}")
-
-                            }
-                        }
-
-                    }
 //
+//
+                    for ((index, value) in storeArrayList.withIndex()) {
+                        if (value.AnsGiven[k] != null) {
+
+
+                            store = value.name
+                            for (ansGiven in value.AnsGiven[k]!!) {
+                                if(ansGiven.eachAns.size>i) {
+                                    if (ansGiven.eachAns[i].visible != 0) {
+                                        jsonObject.put("Date", k)
+                                        jsonObject.put("question", ansGiven.eachAns[i].question)
+
+                                        ans += "${ansGiven.eachAns[i].ans}   *   "
+                                        if (ansGiven.eachAns[i].ans.isEmpty())
+                                            ans += ansGiven.eachAns[i].value
+                                    }
+                                }
+//
+                            }
+                            jsonObject.put(store, ans)
+                            ans = ""
+
+                        }
+                    }
                     if (jsonObject.length() != 0)
                         innerJsonArray.put(jsonObject)
 
                 }
+
 
 
             }
@@ -199,58 +197,53 @@ class DownloadDataActivity : AppCompatActivity() {
 
     }
 
-    fun getDataExported(storeArrayList: ArrayList<SingleStore>, dateArray: ArrayList<String>) {
-        var store = "NautiyalJi"
-        var date = ""
-        var question = "1"
-        var arrayListOfData = ArrayList<ModelExportData>()
-        var ans = ""
-        var innerJsonArray = JSONArray()
-        var stringarry = dateArray
-        Log.d("SSA", "${storeArrayList.size}")
-        if (storeArrayList.size > 0) {
-            var upperAnsGivenArrayList = singleStoreList[0].AnsGiven.size
-            for (k in stringarry) {
-
-                for (i in 0 until upperAnsGivenArrayList) {
-                    var jsonObject = JSONObject()
-                    date = k
-
-
-                    for ((index, value) in storeArrayList.withIndex()) {
-                        jsonObject.put("question", storeArrayList[index].AnsGiven[i].question)
-
-                        store = value.name
-                        var ansGiven = storeArrayList[index].AnsGiven[i].shortedByDate[date]
-
-//                    Log.d("SSA", ansGiven.toString())
-                        if (ansGiven != null) {
-                            for (element in ansGiven.ans) {
-                                ans += "$element   *   "
-                            }
-                            ans += ansGiven.value
-
-
-//                    question =
-//                    arrayListOfData.add(ModelExportData(clientName, store, question, date, ans))
-
-                            jsonObject.put(store, ans)
-                            ans = ""
-                            Log.d("SSA", "${arrayListOfData.size}")
-                            jsonObject.put("Date", date)
-                        }
-
-                    }
-
-                    innerJsonArray.put(jsonObject)
-
-                }
-
-
-            }
-        }
-        Log.d("DDA", innerJsonArray.toString())
-    }
+//    fun getDataExported(storeArrayList: ArrayList<SingleStore>, dateArray: ArrayList<String>) {
+//        var store = "NautiyalJi"
+//        var date = ""
+//        var question = "1"
+//        var arrayListOfData = ArrayList<ModelExportData>()
+//        var ans = ""
+//        var innerJsonArray = JSONArray()
+//        var stringarry = dateArray
+//        Log.d("SSA", "${storeArrayList.size}")
+//        if (storeArrayList.size > 0) {
+//            var upperAnsGivenArrayList = singleStoreList[0].AnsGiven[date]!![0].eachAns.size
+//            for (k in stringarry) {
+////
+//                for (i in 0 until upperAnsGivenArrayList) {
+//                    var jsonObject = JSONObject()
+////                    date = k
+////
+////
+//                    for ((index, value) in storeArrayList.withIndex()) {
+////                        jsonObject.put("question", storeArrayList[index].AnsGiven[i].question)
+//
+//                        store = value.name
+////                        var ansGiven = storeArrayList[index].AnsGiven[date]
+//                        for (ansGiven in storeArrayList[index].AnsGiven[date]!!) {
+//
+//                            ans += "${ansGiven.eachAns[i]}   *   "
+//                            ans += ansGiven.eachAns[i].value
+////
+//                        }
+//                        jsonObject.put(store, ans)
+//                        ans = ""
+//                        jsonObject.put("Date", date)
+//                    }
+//                    if (jsonObject.length() != 0)
+//                    innerJsonArray.put(jsonObject)
+//
+//                }
+//
+//
+//
+//            }
+//
+//
+//        }
+//    }
+////        Log.d("DDA", innerJsonArray.toString())
+////    }
 
 
     private fun getDates(dateString1: String, dateString2: String): List<Date>? {

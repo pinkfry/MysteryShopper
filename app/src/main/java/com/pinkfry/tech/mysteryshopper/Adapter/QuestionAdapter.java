@@ -28,6 +28,7 @@ import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel;
 import com.pinkfry.tech.mysteryshopper.model.OptionModels;
 import com.pinkfry.tech.mysteryshopper.model.QuestionsModel;
+import com.pinkfry.tech.mysteryshopper.model.SIngleResponseModel;
 
 import java.util.ArrayList;
 
@@ -36,18 +37,18 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     ArrayList<QuestionsModel> arrayList;
     Context context;
     String clientName, storeName;
-    ArrayList<AnsGivenModel> listPreviousAns;
+SIngleResponseModel sIngleResponseModel;
     DatabaseReference dref;
     int questionNumber=0;
     Activity activity;
 
 
-    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName, Activity activity,ArrayList<AnsGivenModel> listPreviousAns) {
+    public QuestionAdapter(ArrayList<QuestionsModel> arrayList, Context context, String clientName, String storeName, Activity activity, SIngleResponseModel sIngleResponseModel) {
         this.arrayList = arrayList;
         this.context = context;
         this.clientName = clientName;
         this.activity=activity;
-        this.listPreviousAns=listPreviousAns;
+this.sIngleResponseModel=sIngleResponseModel;
         this.storeName = storeName;
         dref = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.FirebaseClient)).child(clientName).child(context.getResources().getString(R.string.firebaseStore)).child(storeName).child(context.getResources().getString(R.string.ansGiven));
 
@@ -83,23 +84,37 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder,  final int position) {
 
         final QuestionsModel questionsModel = arrayList.get(position);
+//        QuizShowActivity.singleResponse.getEachAns().add(new AnsGivenModel());
 
         if(questionsModel.getVisible()!=0) {
+
             questionNumber++;
             Log.d(TAG, "onDateSet: " + position);
             if (questionsModel.getType() == 1) {
+                int value=0;
+                if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position) {
+                     value = sIngleResponseModel.getEachAns().get(position).getValue();
+                }
 
                 ((MyHolder) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 int index = 0;
                 for (OptionModels option : questionsModel.getOptions()) {
 
                     ((MyHolder) holder).radioGroupQuestion.addView(addRadioView(option.getOption(), index));
+                    if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position) {
+                        if (option.getValue() == value) {
+                            ((MyHolder) holder).radioGroupQuestion.check(index);
+                        }
+                    }
                     index++;
                 }
                 ((MyHolder) holder).radioGroupQuestion.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        QuizShowActivity.ansArray.get(position).setValue(arrayList.get(position).getOptions().get(checkedId).getValue());
+                        int value=0;
+                        questionsModel.getOptions().get(checkedId).getValue();
+                        Log.d(TAG, "onCheckedChanged: "+QuizShowActivity.singleResponse.getEachAns().size());
+                        QuizShowActivity.singleResponse.getEachAns().set(position,new AnsGivenModel("",questionsModel.getQuestion(),questionsModel.getType(),questionsModel.getOptions().get(checkedId).getValue(),questionsModel.getVisible()));
                     }
                 });
 
@@ -122,9 +137,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
             } else if (questionsModel.getType() == 2) {
-                if(listPreviousAns!=null && listPreviousAns.size()!=0){
-                    int size=listPreviousAns.get(position).getAns().size();
-                    ((MyHolderDate)holder).btnGetDate.setText(listPreviousAns.get(position).getAns().get(size-1));
+                if(sIngleResponseModel!=null && sIngleResponseModel.getEachAns().size()>position) {
+                    String ans = sIngleResponseModel.getEachAns().get(position).getAns();
+                    ((MyHolderDate) holder).btnGetDate.setText(ans);
                 }
                 DatePickerDialog dialog = null;
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
@@ -132,8 +147,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         ((MyHolderDate) holder).btnGetDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         Log.d(TAG, "onDateSet: " + position);
-                        QuizShowActivity.ansArray.get(position).getAns().clear();
-                        QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderDate) holder).btnGetDate.getText().toString());
+                        String ans=((MyHolderDate) holder).btnGetDate.getText().toString();
+                            QuizShowActivity.singleResponse.getEachAns().set(position, new AnsGivenModel(ans, questionsModel.getQuestion(), questionsModel.getType(), 0, questionsModel.getVisible()));
+
                     }
                 };
 
@@ -170,16 +186,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
             } else if (questionsModel.getType() == 3) {
-                if(listPreviousAns!=null && listPreviousAns.size()!=0){
-                    int size=listPreviousAns.get(position).getAns().size();
-                    ((MyHolderTime)holder).btnGetTime.setText(listPreviousAns.get(position).getAns().get(size-1));
+                if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position){
+                    String ans=sIngleResponseModel.getEachAns().get(position).getAns();
+                    ((MyHolderTime)holder).btnGetTime.setText(ans);
                 }
                 TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         ((MyHolderTime) holder).btnGetTime.setText(hourOfDay + " : " + minute + " ");
-                        QuizShowActivity.ansArray.get(position).getAns().clear();
-                        QuizShowActivity.ansArray.get(position).getAns().add(((MyHolderTime) holder).btnGetTime.getText().toString());
+                        String ans=((MyHolderTime) holder).btnGetTime.getText().toString();
+                        QuizShowActivity.singleResponse.getEachAns().set(position,new AnsGivenModel(ans,questionsModel.getQuestion(),questionsModel.getType(),0,questionsModel.getVisible()));
 
                     }
                 };
@@ -213,10 +229,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
             } else if (questionsModel.getType() == 4) {
-
-                if(listPreviousAns!=null && listPreviousAns.size()!=0){
-                    int size=listPreviousAns.get(position).getAns().size();
-                    ((MyHolderInput)holder).tvWriteSomething.setText(listPreviousAns.get(position).getAns().get(size-1));
+                if(sIngleResponseModel!=null&& sIngleResponseModel.getEachAns().size()>position) {
+                    String ans = sIngleResponseModel.getEachAns().get(position).getAns();
+                    ((MyHolderInput) holder).tvWriteSomething.setText(ans);
                 }
                 ((MyHolderInput) holder).etQuestion.setText(questionNumber + ". " + questionsModel.getQuestion());
                 LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -229,8 +244,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ((MyHolderInput) holder).tvWriteSomething.setText(etAnswer.getText().toString());
-                                QuizShowActivity.ansArray.get(position).getAns().clear();
-                                QuizShowActivity.ansArray.get(position).getAns().add(etAnswer.getText().toString());
+                                String ans=((MyHolderInput) holder).tvWriteSomething.getText().toString();
+                                QuizShowActivity.singleResponse.getEachAns().set(position,new AnsGivenModel(ans,questionsModel.getQuestion(),questionsModel.getType(),0,questionsModel.getVisible()));
+
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

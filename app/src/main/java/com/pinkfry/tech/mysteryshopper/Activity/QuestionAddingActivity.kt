@@ -52,16 +52,16 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etQuestion.text.toString(), optionArrayList, 1,1)
                 clientRef.child("$total").setValue(questionModels)
-                for (key in keyArray) {
-                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total").setValue(
-                        UpperAnsGivenModel(
-                            hashMapOf(), 1,
-                            etQuestion.text.toString(),
-                            1
-                        )
-                    )
-
-                }
+//                for (key in keyArray) {
+//                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total").setValue(
+//                        UpperAnsGivenModel(
+//                            hashMapOf(), 1,
+//                            etQuestion.text.toString(),
+//                            1
+//                        )
+//                    )
+//
+//                }
                 total += 1
                 dref.child("total").setValue(total)
                 etQuestion.setText("")
@@ -78,12 +78,12 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etDateQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etDateQuestion.text.toString(), ArrayList(), 2,1)
                 clientRef.child("$total").setValue(questionModels)
-                Log.d("QAA",keyArray.toString())
-                for (key in keyArray) {
-                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString(),1))
-
-                }
+//                Log.d("QAA",keyArray.toString())
+//                for (key in keyArray) {
+//                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
+//                        .setValue(UpperAnsGivenModel(hashMapOf(),2,etDateQuestion.text.toString(),1))
+//
+//                }
                 total += 1
                 dref.child("total").setValue(total)
 
@@ -95,10 +95,10 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etTimeQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etTimeQuestion.text.toString(), ArrayList(), 3,1)
                 clientRef.child("$total").setValue(questionModels)
-                for (key in keyArray) {
-                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString(),1))
-                }
+//                for (key in keyArray) {
+//                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
+//                        .setValue(UpperAnsGivenModel(hashMapOf(), 3,etTimeQuestion.text.toString(),1))
+//                }
                 total += 1
                 dref.child("total").setValue(total)
 
@@ -110,11 +110,11 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etInputFieldQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etInputFieldQuestion.text.toString(), ArrayList(), 4,1)
                 clientRef.child("$total").setValue(questionModels)
-                for (key in keyArray) {
-                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
-                        .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString(),1))
-
-                }
+//                for (key in keyArray) {
+//                    keyRef.child(key).child(resources.getString(R.string.ansGiven)).child("$total")
+//                        .setValue(UpperAnsGivenModel(hashMapOf(), 4,etInputFieldQuestion.text.toString(),1))
+//
+//                }
                 total += 1
                 dref.child("total").setValue(total)
 

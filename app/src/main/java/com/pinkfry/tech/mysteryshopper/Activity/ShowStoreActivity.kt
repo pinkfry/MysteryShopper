@@ -109,22 +109,6 @@ lateinit var keyArray:ArrayList<String>
                 Toast.makeText(this,"Please Add A Store first",Toast.LENGTH_SHORT).show()
             }
         }
-//            btnCreateJson.setOnClickListener {
-//                if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED&& ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
-//                {
-//                    Log.d("SSA","HERE")
-////                    getExportedData(arrayList)
-//                    var intent=Intent(this@ShowStoreActivity,DownloadDataActivity::class.java)
-//                    val gson = Gson()
-//                    val jsonToSend = gson.toJson(arrayList)
-//                    intent.putExtra("singleStore",jsonToSend)
-//                    intent.putExtra("clientName",clientName)
-//                    startActivity(intent)
-//                }
-//                else{
-//                     ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE),1805)
-//                }
-//            }
 
 
         dref.child(resources.getString(R.string.firebaseStore)).addValueEventListener(object :ValueEventListener{
@@ -146,94 +130,94 @@ lateinit var keyArray:ArrayList<String>
     }
 
 
-    fun getExportedData(storeArrayList:ArrayList<SingleStore>){
-        var name="Anant"
-        var store="NautiyalJi"
-        var date=""
-        var question="1"
-        var arrayListOfData=ArrayList<ModelExportData>()
-        var ans=""
-        var innerJsonArray=JSONArray()
-        var stringarry= arrayListOf("712020")
-        for(value in storeArrayList) {
-            var upperAnsGivenArrayList=value.AnsGiven
-            var dateJsonArray=JSONObject()
-            for(k in stringarry) {
-                date=k
-                for (i in 0 until upperAnsGivenArrayList.size) {
-                    var singleDateJson=JSONObject()
-                    var ansGiven = storeArrayList[0].AnsGiven[i].shortedByDate[date]
-
-                    Log.d("SSA",ansGiven.toString())
-                    if(ansGiven!=null) {
-                        for (element in ansGiven.ans) {
-//                        ansJsonObject.put(element)
-                            ans += "$element   *   "
-                        }
-                        ans+=ansGiven.value
-                    }
-//                    singleDateJson.put("ans",ansJsonObject)
-
-//                    singleDateJson.put("value",ansGiven.value)
-
-//                    shortByDateJsonArray.put(singleDateJson)
-                    question=i.toString()
-                    arrayListOfData.add(ModelExportData(name,store,question,date,ans))
-
-                    ans=""
-                }
-
-//                mapList[k] = ansGivenArrayList
-//                ansGivenArrayList.clear()
-//                dateJsonArray.put(k,shortByDateJsonArray)
-
-
-            }
-//            var storeJsonObject=JSONObject()
-
-//            storeJsonObject.put(value.name,dateJsonArray)
-            store=value.name
-
-
-            for(model in arrayListOfData)
-            {
-                var innerJsonObject=JSONObject()
-                innerJsonObject.put("clientName",model.clientName)
-                innerJsonObject.put("storeName",model.storeName)
-                innerJsonObject.put("question",model.question)
-                innerJsonObject.put("date",model.date)
-                innerJsonObject.put("ans",model.ans)
-                innerJsonArray.put(innerJsonObject)
-
-            }//            finalJson.put(storeJsonObject)
-            Log.d("SSA",innerJsonArray.toString())
-        }
-        try {
-//            output = JSONObject(jsonString)
-            val docs =innerJsonArray
-            var path=Environment.getExternalStorageDirectory().absolutePath+"/MysteryShopper/"
-            val file = File(path)
-            if (!file.exists()) {
-                file.mkdirs()
-            }
-            val csv: String = CDL.toString(docs)
-            var timeStamp=System.currentTimeMillis()
-            with(File(file,"excel-$timeStamp.csv")) {
-                writeBytes(csv.toByteArray())
-            }
-
-
-            Log.d("SSA",csv)
-
-            Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-    }
+//    fun getExportedData(storeArrayList:ArrayList<SingleStore>){
+//        var name="Anant"
+//        var store="NautiyalJi"
+//        var date=""
+//        var question="1"
+//        var arrayListOfData=ArrayList<ModelExportData>()
+//        var ans=""
+//        var innerJsonArray=JSONArray()
+//        var stringarry= arrayListOf("712020")
+//        for(value in storeArrayList) {
+//            var upperAnsGivenArrayList=value.AnsGiven
+//            var dateJsonArray=JSONObject()
+//            for(k in stringarry) {
+//                date=k
+//                for (i in 0 until upperAnsGivenArrayList.size) {
+//                    var singleDateJson=JSONObject()
+//                    var ansGiven = storeArrayList[0].AnsGiven[i].shortedByDate[date]
+//
+//                    Log.d("SSA",ansGiven.toString())
+//                    if(ansGiven!=null) {
+//                        for (element in ansGiven.ans) {
+////                        ansJsonObject.put(element)
+//                            ans += "$element   *   "
+//                        }
+//                        ans+=ansGiven.value
+//                    }
+////                    singleDateJson.put("ans",ansJsonObject)
+//
+////                    singleDateJson.put("value",ansGiven.value)
+//
+////                    shortByDateJsonArray.put(singleDateJson)
+//                    question=i.toString()
+//                    arrayListOfData.add(ModelExportData(name,store,question,date,ans))
+//
+//                    ans=""
+//                }
+//
+////                mapList[k] = ansGivenArrayList
+////                ansGivenArrayList.clear()
+////                dateJsonArray.put(k,shortByDateJsonArray)
+//
+//
+//            }
+////            var storeJsonObject=JSONObject()
+//
+////            storeJsonObject.put(value.name,dateJsonArray)
+//            store=value.name
+//
+//
+//            for(model in arrayListOfData)
+//            {
+//                var innerJsonObject=JSONObject()
+//                innerJsonObject.put("clientName",model.clientName)
+//                innerJsonObject.put("storeName",model.storeName)
+//                innerJsonObject.put("question",model.question)
+//                innerJsonObject.put("date",model.date)
+//                innerJsonObject.put("ans",model.ans)
+//                innerJsonArray.put(innerJsonObject)
+//
+//            }//            finalJson.put(storeJsonObject)
+//            Log.d("SSA",innerJsonArray.toString())
+//        }
+//        try {
+////            output = JSONObject(jsonString)
+//            val docs =innerJsonArray
+//            var path=Environment.getExternalStorageDirectory().absolutePath+"/MysteryShopper/"
+//            val file = File(path)
+//            if (!file.exists()) {
+//                file.mkdirs()
+//            }
+//            val csv: String = CDL.toString(docs)
+//            var timeStamp=System.currentTimeMillis()
+//            with(File(file,"excel-$timeStamp.csv")) {
+//                writeBytes(csv.toByteArray())
+//            }
+//
+//
+//            Log.d("SSA",csv)
+//
+//            Toast.makeText(this,"Successfully Downloaded Data",Toast.LENGTH_SHORT).show()
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
+//
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -271,6 +255,7 @@ lateinit var keyArray:ArrayList<String>
                     val jsonToSend = gson.toJson(arrayList)
                     intent.putExtra("singleStore",jsonToSend)
                     intent.putExtra("clientName",clientName)
+                    intent.putExtra("total", total)
                     startActivity(intent)
                 }
                 else{
@@ -313,26 +298,25 @@ lateinit var keyArray:ArrayList<String>
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(snapshot in dataSnapshot.children){
-                    var storeModel=snapshot.getValue(SingleStore::class.java)
-                    if(storeModel!=null) {
-                        for ((index, element) in storeModel.AnsGiven.withIndex()) {
-                            resetRef.child(snapshot.key.toString())
-                                .child(resources.getString(R.string.ansGiven)).child(index.toString())
-                                .child("shortedByDate").setValue(null)
-                        }
-                        resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0).addOnSuccessListener {
-                            Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
-
-                        }.addOnFailureListener {
-                            Toast.makeText(this@ShowStoreActivity,"Reset Failed, It may be due to bad Internet Connectivity",Toast.LENGTH_SHORT).show()
-
-                        }
-                    }
-
-                    resetRef.removeEventListener(this)
-                    Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
-
+                    resetRef.child(snapshot.key.toString()).child(resources.getString(R.string.ansGiven)).setValue(null)
+//                    var storeModel=snapshot.getValue(SingleStore::class.java)
+//                    if(storeModel!=null) {
+//                        for ((index, element) in storeModel.AnsGiven.withIndex()) {
+//                            resetRef.child(snapshot.key.toString())
+//                                .child(resources.getString(R.string.ansGiven)).child(index.toString())
+//                                .child("shortedByDate").setValue(null)
+//                        }
+//                        resetRef.child(snapshot.key.toString()).child("totalClient").setValue(0).addOnSuccessListener {
+//                            Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
+//
+//                        }.addOnFailureListener {
+//                            Toast.makeText(this@ShowStoreActivity,"Reset Failed, It may be due to bad Internet Connectivity",Toast.LENGTH_SHORT).show()
+//
+//                        }
+//                    }
                 }
+                resetRef.removeEventListener(this)
+                Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
             }
         })
 

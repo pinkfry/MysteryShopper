@@ -112,7 +112,7 @@ class EditQuestionActivity : AppCompatActivity() {
                     editWholeStore(view.etTimeQuestion.text.toString())
                 }
                 view.btnDeleteTimeQuestion.setOnClickListener {
-                    //                    dref.child("Questions").child("$position").setValue(QuestionsModel(view.etTimeQuestion.text.toString(),ArrayList(),3,0))
+//                                        dref.child("Questions").child("$position").setValue(QuestionsModel(view.etTimeQuestion.text.toString(),ArrayList(),3,0))
 //                    deleteQuestion();
                     alertDialog.show()
                 }
@@ -195,7 +195,7 @@ class EditQuestionActivity : AppCompatActivity() {
             .setTitle("Delete Question")
             .setPositiveButton("Delete") { dialog, which ->
                 dref.child("Questions").child("$position").child("visible").setValue(0)
-                deleteQuestion()
+//                deleteQuestion()
 
             }
             .setNegativeButton("Cancel") { dialog, which -> }

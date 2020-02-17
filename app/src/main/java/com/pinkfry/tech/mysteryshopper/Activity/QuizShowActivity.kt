@@ -13,22 +13,26 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pinkfry.tech.mysteryshopper.Adapter.QuestionAdapter
 import com.pinkfry.tech.mysteryshopper.R
-import com.pinkfry.tech.mysteryshopper.model.AnsGivenModel
-import com.pinkfry.tech.mysteryshopper.model.QuestionsModel
-import com.pinkfry.tech.mysteryshopper.model.UpperAnsGivenModel
+import com.pinkfry.tech.mysteryshopper.model.*
 import kotlinx.android.synthetic.main.activity_quiz_show.*
 import java.lang.reflect.Type
+import kotlin.reflect.typeOf
 
 
 class QuizShowActivity : AppCompatActivity() {
     companion object{
-        lateinit var ansToSendArrayList:ArrayList<AnsGivenModel>
-        lateinit var arraylistGot:ArrayList<UpperAnsGivenModel>
-        lateinit var ansArray: ArrayList<AnsGivenModel>
-        lateinit var lastResponseList:ArrayList<AnsGivenModel>
+//        lateinit var ansToSendArrayList:ArrayList<AnsGivenModel>
+        lateinit var arraylistGot:ArrayList<SIngleResponseModel>
+//        lateinit var ansArray: ArrayList<AnsGivenModel>
+        lateinit var lastResponseList:HashMap<String,ArrayList<SIngleResponseModel>>
+        lateinit var singleResponse:SIngleResponseModel
         lateinit var date:String
+
         var latestDate="2019-2-16"
+
     }
+    var idPositionOfLastResponse=0;
+    var isEditing=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,22 +42,31 @@ class QuizShowActivity : AppCompatActivity() {
          date=intent.getStringExtra("date")!!
         val ansToSend=intent.getStringExtra("ansToSend")
         var totalClient=intent.getIntExtra("totalClient",0)
-        val gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<UpperAnsGivenModel?>?>() {}.type
-        arraylistGot=gson.fromJson<ArrayList<UpperAnsGivenModel>>(ansToSend,type)
-        ansToSendArrayList= ArrayList()
-        for((element,index) in arraylistGot){
-            if(element[date]==null){
-                ansToSendArrayList.add(AnsGivenModel())
-            }
-            else {
-                element[date]?.let { ansToSendArrayList.add(it) }
-            }
-            Log.d("QSA", element[date].toString())
-            Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
-        }
-        ansArray= ArrayList()
-        lastResponseList=ArrayList()
+//        Log.d("QSA","${ansToSend.indexOf('n')}")
+         if(ansToSend.equals("null")) {
+             arraylistGot = ArrayList()
+         }
+        else {
+             val gson = Gson()
+             val type: Type = object : TypeToken<ArrayList<SIngleResponseModel?>?>() {}.type
+             arraylistGot = gson.fromJson<ArrayList<SIngleResponseModel>>(ansToSend, type)
+         }
+
+
+//        ansToSendArrayList= ArrayList()
+//        for((element,index) in arraylistGot){
+//            if(element[date]==null){
+//                ansToSendArrayList.add(AnsGivenModel())
+//            }
+//            else {
+//                element[date]?.let { ansToSendArrayList.add(it) }
+//            }
+//            Log.d("QSA", element[date].toString())
+//            Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
+//        }
+//        ansArray= ArrayList()
+        lastResponseList= hashMapOf()
+        singleResponse= SIngleResponseModel()
 
         supportActionBar!!.title = storeName
         var dref= FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child("Questions")
@@ -70,13 +83,17 @@ class QuizShowActivity : AppCompatActivity() {
                 for(snapshot in dataSnapshot.children){
                     questionArrayList.add(snapshot.getValue(QuestionsModel::class.java)!!)
                      questionKeyArrayList.add(snapshot.key.toString())
+                    singleResponse.eachAns.add(AnsGivenModel())
                     Log.d("QSA","$questionArrayList")
 
                 }
-                for(value in 1..questionArrayList.size)
-                {
-                    ansArray.add(AnsGivenModel())
-                }
+//                for(value in 1..questionArrayList.size)
+//                {
+//                    ansArray.add(AnsGivenModel())
+//                }
+
+//                singleResponse.eachAns= ArrayList(questionArrayList.size)
+                Log.d("QSA", "${singleResponse.eachAns.size}")
                 var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
                     this@QuizShowActivity,null)
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
@@ -86,6 +103,7 @@ class QuizShowActivity : AppCompatActivity() {
         })
 
         btnEditPreviousResponse.setOnClickListener {
+            isEditing=true
            val dbref = FirebaseDatabase.getInstance().reference
                 .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
                 .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
@@ -94,67 +112,101 @@ class QuizShowActivity : AppCompatActivity() {
                     }
 
                     override fun onDataChange(p0: DataSnapshot) {
-                        Log.d("QSA","here")
-                        ansToSendArrayList= ArrayList()
-                        for(snapshot in p0.children) {
-                            Log.d("QSA", snapshot.getValue(UpperAnsGivenModel::class.java).toString())
-                            lastResponseList.add(getLastResponse(snapshot.getValue(UpperAnsGivenModel::class.java)?.shortedByDate!!))
+                        if (p0.exists()) {
+                            for (snapshot in p0.children) {
+                                var arraylist = ArrayList<SIngleResponseModel>()
+                                for (element in snapshot.children) {
+                                    arraylist.add(element.getValue(SIngleResponseModel::class.java)!!)
+                                }
+                                lastResponseList[snapshot.key.toString()] = arraylist
+                            }
+                            singleResponse = getLastResponse(lastResponseList)
+                            for (elementVal in singleResponse.eachAns.size until questionArrayList.size) {
+                                singleResponse.eachAns.add(AnsGivenModel())
+                            }
+                            val questionAdapter = QuestionAdapter(
+                                questionArrayList, this@QuizShowActivity, clientName, storeName,
+                                this@QuizShowActivity,
+                                singleResponse
+                            )
+                            rvQuizQuestions.layoutManager = LinearLayoutManager(this@QuizShowActivity)
+                            rvQuizQuestions.adapter = questionAdapter
+
+
+                            dbref.removeEventListener(this)
                         }
-//                        ansArray=lastResponseList
-                        val questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
-                            this@QuizShowActivity,
-                            lastResponseList)
-                        rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
-                        rvQuizQuestions.adapter=questionAdapter
-                        dbref.removeEventListener(this)
+                        else{
+                            Toast.makeText(this@QuizShowActivity,"No Previous Response Found",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
         }
         btnSubmit.setOnClickListener {
-            dref = FirebaseDatabase.getInstance().reference
-                .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
-                .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
-            dref.child("totalClient").setValue(totalClient+1)
-            dref.child(resources.getString(R.string.ansGiven)).setValue(getFinalOptionStatus()).addOnSuccessListener {
-                Toast.makeText(this,"Successfully Added Response",Toast.LENGTH_SHORT).show()
-                finish()
-            }.addOnFailureListener{
-                Toast.makeText(this,"Unable to connect to internet",Toast.LENGTH_SHORT).show()
+            singleResponse.date= date
+            if(isEditing){
+              FirebaseDatabase.getInstance().reference
+                    .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
+                    .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
+                    .child(resources.getString(R.string.ansGiven))
+                    .child(date).child(idPositionOfLastResponse.toString()).setValue(singleResponse)
+                  .addOnSuccessListener {
+                      Toast.makeText(this, "Successfully Added Response", Toast.LENGTH_SHORT).show()
+                      finish()
+                  }.addOnFailureListener {
+                      Toast.makeText(this, "Unable to connect to internet", Toast.LENGTH_SHORT).show()
+                  }
+            }
+            else {
+                arraylistGot.add(singleResponse)
+                dref = FirebaseDatabase.getInstance().reference
+                    .child(resources.getString(R.string.FirebaseClient)).child(clientName!!)
+                    .child(resources.getString(R.string.firebaseStore)).child(storeName!!)
+                dref.child("totalClient").setValue(totalClient + 1)
+                dref.child(resources.getString(R.string.ansGiven)).child(date).setValue(arraylistGot)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Successfully Added Response", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }.addOnFailureListener {
+                    Toast.makeText(this, "Unable to connect to internet", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
-    fun getFinalOptionStatus() : ArrayList<UpperAnsGivenModel>{
+//    fun getFinalOptionStatus() : ArrayList<UpperAnsGivenModel>{
+//
+////       for((index,element)in ansToSendArrayList.withIndex())
+////       {
+////           var value=element.ans
+////           value.addAll(ansArray[index].ans)
+////           var ansGivenModel=AnsGivenModel(value,element.value+ ansArray[index].value)
+////           Log.d("QSA",ansGivenModel.toString())
+////           arraylistGot[index].shortedByDate[date] = ansGivenModel
+////       }
+//        return arraylistGot
+//    }
 
-       for((index,element)in ansToSendArrayList.withIndex())
-       {
-           var value=element.ans
-           value.addAll(ansArray[index].ans)
-           var ansGivenModel=AnsGivenModel(value,element.value+ ansArray[index].value)
-           Log.d("QSA",ansGivenModel.toString())
-           arraylistGot[index].shortedByDate[date] = ansGivenModel
-       }
-        return arraylistGot
-    }
-    fun getLastResponse(shortedByDate:HashMap<String,AnsGivenModel>): AnsGivenModel{
+    fun getLastResponse(shortedByDate:HashMap<String,ArrayList<SIngleResponseModel>>): SIngleResponseModel{
         latestDate="2019-2-16"
-
-        for(element in shortedByDate.keys)
+        var isThereAnyElement:Int=-1
+        for(element in shortedByDate)
         {
-            if(element.compareTo(latestDate)==1)
-            latestDate=element
+            if(element.key.compareTo(latestDate)==1)
+            latestDate=element.key
+            isThereAnyElement=1
 
         }
-        date= latestDate
-        if(shortedByDate[latestDate]==null){
-            ansToSendArrayList.add(AnsGivenModel())
+        if(isThereAnyElement==1) {
+            date = latestDate
+            Log.d("QSA", latestDate)
+            idPositionOfLastResponse=shortedByDate[date]!!.size-1
+            Log.d("QSA", "$idPositionOfLastResponse")
+            Log.d("QSA", shortedByDate.toString())
+            return shortedByDate[date]!![idPositionOfLastResponse]
         }
         else {
-            shortedByDate[latestDate]?.let { ansToSendArrayList.add(it) }
+            Toast.makeText(this,"No Response Found",Toast.LENGTH_SHORT).show()
+            return SIngleResponseModel()
         }
-        Log.d("QSA", latestDate)
-        return if(shortedByDate[latestDate]!=null)
-            shortedByDate[latestDate]!!
-        else
-            AnsGivenModel()
+
     }
 }
