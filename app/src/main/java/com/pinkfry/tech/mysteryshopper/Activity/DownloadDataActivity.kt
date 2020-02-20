@@ -142,11 +142,10 @@ class DownloadDataActivity : AppCompatActivity() {
                                         ans += "${ansGiven.eachAns[i].ans}   *   "
                                         if (ansGiven.eachAns[i].ans.isEmpty())
                                             ans += ansGiven.eachAns[i].value
+                                        jsonObject.put(store, ans)
                                     }
                                 }
-//
                             }
-                            jsonObject.put(store, ans)
                             ans = ""
 
                         }

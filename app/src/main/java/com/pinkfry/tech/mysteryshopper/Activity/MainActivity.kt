@@ -55,6 +55,7 @@ lateinit var alertDialog: AlertDialog.Builder
             //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
             var intent=Intent(this@MainActivity, AddClientActivity::class.java)
+
             startActivity(intent)
         }
     }

@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
 
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:background="@color/backgroundGrey"
         android:layout_height="match_parent"
         tools:context=".Activity.AddClientActivity">
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_height="match_parent">
+
+<LinearLayout android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_margin="10dp"
+              android:background="@drawable/modified_curved_linear_view"
+              android:layout_height="wrap_content">
+    <Button android:layout_width="wrap_content"
+            android:text="Choose image"
+            android:id="@+id/btnChooseImage"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"/>
+    <TextView android:layout_width="match_parent"
+              android:id="@+id/tvPercentage"
+              android:text="Status of upload will be shown here"
+              android:textStyle="bold"
+              android:textColor="@color/colorBlack"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+    />
+        <ImageView android:layout_width="100dp"
+                   android:layout_gravity="center"
+                   android:layout_margin="10dp"
+                   android:id="@+id/imageShowSelectedImage"
+                   android:src="@drawable/ic_insert_photo"
+                   android:layout_height="100dp"/>
+</LinearLayout>
+        <TextView android:layout_width="match_parent"
+                  android:textSize="20sp"
+                  android:gravity="center"
+                  android:text="OR"
+                  android:textStyle="bold"
+                  android:textColor="@color/colorBlack"
+                  android:layout_margin="5dp"
+                  android:layout_height="wrap_content"/>
     <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
+            android:padding="20dp"
+            android:background="@drawable/modified_curved_linear_view"
             android:id="@+id/viewPager2"
             android:layout_height="wrap_content">
 
@@ -26,4 +66,5 @@
             android:layout_gravity="center"
             android:id="@+id/btnAddClient"
             android:layout_height="wrap_content"/>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

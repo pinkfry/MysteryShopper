@@ -67,10 +67,15 @@ class EditQuestionActivity : AppCompatActivity() {
                     }
                 }
                 view.btnAddQuestions.setOnClickListener {
-                    Log.d("EQA", position.toString()!!)
+                    Log.d("EQA", position.toString())
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etQuestion.text.toString(), optionArrayList, 1, 1))
-                    editWholeStore(view.etQuestion.text.toString())
+                        .addOnSuccessListener {
+                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+//                    editWholeStore(view.etQuestion.text.toString())
                 }
                 view.btnDeleteQuestion.setOnClickListener {
                     //                    dref.child("Questions").child("$position").child("visible").setValue(0)
@@ -90,7 +95,12 @@ class EditQuestionActivity : AppCompatActivity() {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etDateQuestion.text.toString(), ArrayList(), 2, 1))
-                    editWholeStore(view.etDateQuestion.text.toString())
+                        .addOnSuccessListener {
+                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+//                    editWholeStore(view.etDateQuestion.text.toString())
                 }
                 view.btnDeleteDateQuestion.setOnClickListener {
                     //                    dref.child("Questions").child("$position").setValue(QuestionsModel(view.etDateQuestion.text.toString(),ArrayList(),2,0))
@@ -109,7 +119,12 @@ class EditQuestionActivity : AppCompatActivity() {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etTimeQuestion.text.toString(), ArrayList(), 3, 1))
-                    editWholeStore(view.etTimeQuestion.text.toString())
+                        .addOnSuccessListener {
+                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+//                    editWholeStore(view.etTimeQuestion.text.toString())
                 }
                 view.btnDeleteTimeQuestion.setOnClickListener {
 //                                        dref.child("Questions").child("$position").setValue(QuestionsModel(view.etTimeQuestion.text.toString(),ArrayList(),3,0))
@@ -127,7 +142,12 @@ class EditQuestionActivity : AppCompatActivity() {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etInputFieldQuestion.text.toString(), ArrayList(), 4, 1))
-                    editWholeStore(view.etInputFieldQuestion.text.toString())
+                        .addOnSuccessListener {
+                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+//                    editWholeStore(view.etInputFieldQuestion.text.toString())
                 }
                 view.btnDeleteInputQuestion.setOnClickListener {
                     //                    dref.child("Questions").child("$position").setValue(QuestionsModel(view.etInputFieldQuestion.text.toString(),ArrayList(),4,0))
@@ -194,7 +214,11 @@ class EditQuestionActivity : AppCompatActivity() {
             .setMessage("Do you want to delete Question")
             .setTitle("Delete Question")
             .setPositiveButton("Delete") { dialog, which ->
-                dref.child("Questions").child("$position").child("visible").setValue(0)
+                dref.child("Questions").child("$position").child("visible").setValue(0).addOnSuccessListener {
+                    Toast.makeText(this@EditQuestionActivity, "Question has been deleted successfully ", Toast.LENGTH_SHORT)
+                        .show()
+                    finish()
+                }
 //                deleteQuestion()
 
             }

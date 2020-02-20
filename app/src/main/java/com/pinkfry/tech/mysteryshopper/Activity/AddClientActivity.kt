@@ -1,7 +1,11 @@
 package com.pinkfry.tech.mysteryshopper.Activity
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -9,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 import androidx.viewpager2.widget.ViewPager2
 import com.asaantechnologies.uparkusers.SignInSection.Activity.utils.MyRecyclerViewAdapter
+import com.google.firebase.storage.FirebaseStorage
 import com.pinkfry.tech.mysteryshopper.R
 import com.pinkfry.tech.mysteryshopper.Utils.HorizontalMarginItemDecoration
 import kotlinx.android.synthetic.main.activity_add_client.*
@@ -16,6 +21,11 @@ import java.lang.Math.abs
 
 class AddClientActivity : AppCompatActivity() {
     companion object{var selectedPosition=0}
+    val PICK_REQUEST = 1234
+    lateinit var filePath: Uri
+    var storage = FirebaseStorage.getInstance().reference
+    private val databaseReference = FirebaseDatabase.getInstance().reference
+    var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_client)
@@ -47,6 +57,8 @@ class AddClientActivity : AppCompatActivity() {
         })
         viewPager2.setPageTransformer(pageTransformer)
 
+        btnChooseImage.setOnClickListener { choosePhoto() }
+
 
 
 // The ItemDecoration gives the current (centered) item horizontal margin so that
@@ -64,7 +76,7 @@ class AddClientActivity : AppCompatActivity() {
                 childAddRef.child(name).child("imagePosition").setValue(selectedPosition)
                 childAddRef.child(name).child("name").setValue(name).addOnSuccessListener {
                     etClientName.setText("")
-                    Toast.makeText(this,"Client Successfully Added",Toast.LENGTH_SHORT).show()
+                    uploadPhoto(name)
                 }.addOnCanceledListener {
 
                     Toast.makeText(this,"Failed To Added",Toast.LENGTH_SHORT).show()
@@ -72,6 +84,55 @@ class AddClientActivity : AppCompatActivity() {
             }
             else{
                 Toast.makeText(this,"Please Enter the Name",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun choosePhoto() {
+        var intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT;
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                filePath = data!!.data!!
+                try {
+                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                    imageShowSelectedImage.setImageBitmap(bitmap)
+
+                    count = 1
+                } catch (e: Exception) {
+
+                }
+
+            }
+
+        }
+    }
+
+    private fun uploadPhoto(name:String) {
+        if (count == 1) {
+            var childReference = storage.child("IMAGES").child(name.toUpperCase())
+                .child(System.currentTimeMillis().toString())
+            childReference.putFile(filePath).addOnSuccessListener { it ->
+                Toast.makeText(this, "${it.storage.downloadUrl}", Toast.LENGTH_SHORT).show()
+                childReference.downloadUrl.addOnSuccessListener {
+                    databaseReference.child(resources.getString(R.string.FirebaseClient)).child(name).child("imageUrl").setValue(it.toString())
+
+                }
+//                  databaseReference.child(intent.getStringExtra("name")).child("PGPROFILE").child("IMAGES").push().setValue(it.storage.downloadUrl)
+                Toast.makeText(this,"Client Successfully Added",Toast.LENGTH_SHORT).show()
+                count = 0
+            }.addOnProgressListener {
+                tvPercentage.text=(it.bytesTransferred/it.totalByteCount*100.0).toString()+"%"
+
+            }.addOnFailureListener {
+                Toast.makeText(this,"Failed to add the client",Toast.LENGTH_SHORT).show()
             }
         }
     }

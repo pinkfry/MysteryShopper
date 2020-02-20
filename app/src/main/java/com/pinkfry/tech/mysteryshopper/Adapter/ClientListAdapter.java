@@ -12,14 +12,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.SingleClient;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,7 +54,12 @@ public static final String TAG="CLA";
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
         holder.tvClientName.setText(arrayList.get(position).getName());
-        holder.imageAvtar.setImageResource(imagesArray[arrayList.get(position).getImagePosition()]);
+        if (arrayList.get(position).getImageUrl().isEmpty()) {
+            holder.imageAvtar.setImageResource(imagesArray[arrayList.get(position).getImagePosition()]);
+        }
+        else{
+            Picasso.get().load(arrayList.get(position).getImageUrl()).placeholder(imagesArray[arrayList.get(position).getImagePosition()]).into(holder.imageAvtar);
+        }
 
         holder.linearSingleClient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +111,13 @@ public static final String TAG="CLA";
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseReference dref= FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient)).child(clientName);
+                        StorageReference fstore=FirebaseStorage.getInstance().getReference();
+                                fstore.child("IMAGES").child(clientName).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(activity, "Successfully deleted the Client", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         dref.setValue(null);
                         arrayList.remove(position);
                         notifyDataSetChanged();
