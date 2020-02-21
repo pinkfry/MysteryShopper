@@ -51,12 +51,12 @@ lateinit var keyArray:ArrayList<String>
         setContentView(R.layout.activity_add_store)
 
         keyArray= ArrayList()
-         clientName=intent.getStringExtra("name")!!
+         clientName=intent.getStringExtra("nodeName")!!
          total=intent.getIntExtra("total",0)
         var questionList=intent.getStringExtra("questionList")
         createAlerDialog()
         var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
-        toolbar.title = clientName
+        toolbar.title = intent.getStringExtra("name")
           toolbar.inflateMenu(R.menu.menu_store_option)
         setSupportActionBar(toolbar)
         window.statusBarColor= getColor(R.color.colorPrimaryDark)

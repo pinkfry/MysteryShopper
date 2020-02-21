@@ -96,6 +96,18 @@ class QuizShowActivity : AppCompatActivity() {
                 Log.d("QSA", "${singleResponse.eachAns.size}")
                 var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
                     this@QuizShowActivity,null)
+                if(questionArrayList.size==0){
+                    btnSubmit.isClickable=false
+                    btnSubmit.alpha=0.5f
+                    btnEditPreviousResponse.alpha=0.5f
+                    btnEditPreviousResponse.isClickable=false
+                }
+                else{
+                    btnSubmit.isClickable=true
+                    btnSubmit.alpha=1f
+                    btnEditPreviousResponse.alpha=1f
+                    btnEditPreviousResponse.isClickable=true
+                }
                 rvQuizQuestions.layoutManager=LinearLayoutManager(this@QuizShowActivity)
                 rvQuizQuestions.adapter=questionAdapter
 

@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.pinkfry.tech.mysteryshopper.Activity.AddClientActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.SingleClient;
@@ -53,20 +54,22 @@ public static final String TAG="CLA";
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, final int position) {
-        holder.tvClientName.setText(arrayList.get(position).getName());
-        if (arrayList.get(position).getImageUrl().isEmpty()) {
-            holder.imageAvtar.setImageResource(imagesArray[arrayList.get(position).getImagePosition()]);
+        final SingleClient singleClient=arrayList.get(position);
+        holder.tvClientName.setText(singleClient.getName());
+        if (singleClient.getImageUrl().isEmpty()) {
+            holder.imageAvtar.setImageResource(imagesArray[singleClient.getImagePosition()]);
         }
         else{
-            Picasso.get().load(arrayList.get(position).getImageUrl()).placeholder(imagesArray[arrayList.get(position).getImagePosition()]).into(holder.imageAvtar);
+            Picasso.get().load(singleClient.getImageUrl()).placeholder(imagesArray[singleClient.getImagePosition()]).into(holder.imageAvtar);
         }
 
         holder.linearSingleClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(activity, ShowStoreActivity.class);
-                intent.putExtra("name",arrayList.get(position).getName());
-                intent.putExtra("total",arrayList.get(position).getTotal());
+                intent.putExtra("nodeName",singleClient.getNodeName());
+                intent.putExtra("name",singleClient.getName());
+                intent.putExtra("total",singleClient.getTotal());
                 Gson gson=new Gson();
 //                Log.d(TAG, "onClick: "+arrayList.get(position).getQuestions().size());
 //                Log.d(TAG, "onClick: "+arrayList.get(position).getTotal());
@@ -74,17 +77,30 @@ public static final String TAG="CLA";
                 activity.startActivity(intent);
             }
         });
+        holder.imageAvtar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Intent intent=new Intent(activity, AddClientActivity.class);
+                intent.putExtra("mode",1);
+                intent.putExtra("clientName",singleClient.getName());
+                intent.putExtra("nodeName",singleClient.getNodeName());
+                activity.startActivity(intent);
+                return true;
+            }
+        });
 
         holder.linearSingleClient.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
 
-                showAlertDialogBox(arrayList.get(position).getName(),position);
+                showAlertDialogBox(arrayList.get(position).getNodeName(),position);
                 alertDialog.show();
 
                 return true;
             }
         });
+
     }
 
     @Override

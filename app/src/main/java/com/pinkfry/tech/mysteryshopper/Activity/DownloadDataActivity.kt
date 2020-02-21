@@ -139,7 +139,7 @@ class DownloadDataActivity : AppCompatActivity() {
                                         jsonObject.put("Date", k)
                                         jsonObject.put("question", ansGiven.eachAns[i].question)
 
-                                        ans += "${ansGiven.eachAns[i].ans}   *   "
+                                        ans += "${ansGiven.eachAns[i].ans} \n  "
                                         if (ansGiven.eachAns[i].ans.isEmpty())
                                             ans += ansGiven.eachAns[i].value
                                         jsonObject.put(store, ans)
