@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,6 @@ import com.pinkfry.tech.mysteryshopper.Activity.AddClientActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.ShowStoreActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 import com.pinkfry.tech.mysteryshopper.model.SingleClient;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -60,7 +60,7 @@ public static final String TAG="CLA";
             holder.imageAvtar.setImageResource(imagesArray[singleClient.getImagePosition()]);
         }
         else{
-            Picasso.get().load(singleClient.getImageUrl()).placeholder(imagesArray[singleClient.getImagePosition()]).into(holder.imageAvtar);
+            Glide.with(activity.getBaseContext()).load(singleClient.getImageUrl()).placeholder(imagesArray[singleClient.getImagePosition()]).into(holder.imageAvtar);
         }
 
         holder.linearSingleClient.setOnClickListener(new View.OnClickListener() {

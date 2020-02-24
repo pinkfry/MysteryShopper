@@ -58,4 +58,7 @@
     <string name="uploadImage">Cargar imagen</string>
     <string name="gallery">Galería</string>
     <string name="camera">Cámara abierta</string>
+    <string name="nothingToShow">Nada que mostrar, no se encontraron imágenes</string>
+    <string name="enterTagLine">Ingrese la línea de etiqueta</string>
+    <string name="pleaseSelectImage">Por favor seleccione imagen</string>
 </resources>

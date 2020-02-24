@@ -60,5 +60,8 @@
     <string name="uploadImage">Upload Image</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Open Camera</string>
+    <string name="nothingToShow">Nothing to show, No images found</string>
+    <string name="enterTagLine">Enter the Tag Line</string>
+    <string name="pleaseSelectImage">Please Select Image</string>
 
 </resources>

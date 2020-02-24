@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.pinkfry.tech.mysteryshopper.Activity.GalleryActivity;
 import com.pinkfry.tech.mysteryshopper.Activity.UploadImagesActivity;
 import com.pinkfry.tech.mysteryshopper.R;
 
@@ -36,6 +37,10 @@ public class BottomSheetGalleryFragment extends BottomSheetDialogFragment {
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GalleryActivity.class);
+                intent.putExtra("clientName", clientName);
+                intent.putExtra("storeName", storeName);
+                startActivity(intent);
                 dismiss();
             }
         });

@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.pinkfry.tech.mysteryshopper.R
+import com.pinkfry.tech.mysteryshopper.model.GalleryModel
 import kotlinx.android.synthetic.main.activity_add_client.btnChooseImage
 import kotlinx.android.synthetic.main.activity_add_client.imageShowSelectedImage
 import kotlinx.android.synthetic.main.activity_add_client.tvPercentage
@@ -101,7 +102,7 @@ class UploadImagesActivity : AppCompatActivity() {
             childReference.putFile(filePath).addOnSuccessListener { it ->
                 Toast.makeText(this, "${it.storage.downloadUrl}", Toast.LENGTH_SHORT).show()
                 childReference.downloadUrl.addOnSuccessListener {
-                    databaseReference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child(resources.getString(R.string.firebaseStore)).child(storeName).child("gallery").push().setValue(it.toString())
+                    databaseReference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child(resources.getString(R.string.firebaseStore)).child(storeName).child("gallery").push().setValue(GalleryModel(it.toString(),etTagLine.text.toString()))
 
                 }
                 Toast.makeText(this, resources.getString(R.string.clientSuccessfullyAdded), Toast.LENGTH_SHORT).show()
@@ -114,7 +115,7 @@ class UploadImagesActivity : AppCompatActivity() {
                 Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(this, resources.getString(R.string.clientUpadatedSuccessfully), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.pleaseSelectImage), Toast.LENGTH_SHORT).show()
         }
     }
 }
