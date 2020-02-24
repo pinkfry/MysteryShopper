@@ -22,7 +22,6 @@
                 <TextView android:layout_width="match_parent"
                           android:id="@+id/tvQuestion"
                           android:padding="5dp"
-                          android:text="Hello"
                           android:textStyle="bold"
                           android:textColor="@color/colorBlack"
                           android:textSize="15sp"

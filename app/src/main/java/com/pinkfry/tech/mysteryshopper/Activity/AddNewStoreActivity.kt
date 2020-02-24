@@ -56,13 +56,13 @@ class AddNewStoreActivity : AppCompatActivity() {
                     etStoreName.setText("")
                     etAddress.setText("")
                     etPhoneNo.setText("")
-                    Toast.makeText(this,"Store Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,resources.getString(R.string.storeAddedSuccessfully), Toast.LENGTH_SHORT).show()
                 }.addOnCanceledListener {
-                    Toast.makeText(this,"Failed To Add Store", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                 }
             }
             else{
-                Toast.makeText(this,"Please Fill All the Fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,resources.getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
             }
         }
     }

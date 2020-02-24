@@ -45,17 +45,17 @@ class QuestionAddingActivity : AppCompatActivity() {
                 etValue.setText("")
                 optionAdapter.notifyDataSetChanged()
             } else {
-                Toast.makeText(this, "Please enter the Option and its Value", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.pleaseEnterOption), Toast.LENGTH_SHORT).show()
             }
         }
         btnAddQuestions.setOnClickListener {
             if (etQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etQuestion.text.toString(), optionArrayList, 1,1)
                 clientRef.child("$total").setValue(questionModels).addOnSuccessListener {
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                 }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                     }
                 total += 1
                 dref.child("total").setValue(total)
@@ -65,7 +65,7 @@ class QuestionAddingActivity : AppCompatActivity() {
                 optionArrayList.clear()
                 optionAdapter.notifyDataSetChanged()
             } else {
-                Toast.makeText(this, "Please enter the Question", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.pleaseEnterQuestion), Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -73,10 +73,10 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etDateQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etDateQuestion.text.toString(), ArrayList(), 2,1)
                 clientRef.child("$total").setValue(questionModels).addOnSuccessListener {
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                 }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                     }
 
                 total += 1
@@ -90,10 +90,10 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etTimeQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etTimeQuestion.text.toString(), ArrayList(), 3,1)
                 clientRef.child("$total").setValue(questionModels).addOnSuccessListener {
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                 }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                     }
 
                 total += 1
@@ -107,10 +107,10 @@ class QuestionAddingActivity : AppCompatActivity() {
             if (etInputFieldQuestion.text.toString().isNotEmpty()) {
                 var questionModels = QuestionsModel(etInputFieldQuestion.text.toString(), ArrayList(), 4,1)
                 clientRef.child("$total").setValue(questionModels).addOnSuccessListener {
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                 }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                     }
 
                 total += 1

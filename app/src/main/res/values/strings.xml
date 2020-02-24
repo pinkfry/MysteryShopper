@@ -1,8 +1,64 @@
 <resources>
     <string name="app_name">Mystery Shopper</string>
     <string name="action_settings">Reset All</string>
-    <string name="FirebaseClient">CLIENT</string>
-    <string name="firebaseStore">Stores</string>
-    <string name="ansGiven">ansGiven</string>
+    <string name="Add">Add</string>
+    <string name="Or">OR</string>
+    <string name="uploadStatus">Status of upload will be shown here</string>
+    <string name="chooseImage">Choose image</string>
+    <string name="name">Name</string>
+    <string name="FirebaseClient" translatable="false">CLIENT</string>
+    <string name="firebaseStore" translatable="false">Stores</string>
+    <string name="ansGiven" translatable="false">ansGiven</string>
+    <string name="addQuestion">Add Questions</string>
+    <string name="downloadData">Download Data</string>
+    <string name="fileLocationDisplay">File Location will be displayed here</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="chooseQuestion">Choice Questions</string>
+    <string name="enterQuestion">Enter the Question</string>
+    <string name="enterOption">Enter the Options</string>
+    <string name="value">Value</string>
+    <string name="addOption">Add Options</string>
+    <string name="deleteQuestions">Delete Questions</string>
+    <string name="dateRelatedQuestions">Date related Questions</string>
+    <string name="timeRelateQuestion">Time related Questions</string>
+    <string name="inputRelatedQuestion">Input Field related Questions</string>
+    <string name="editPreviousResponse">Edit Previous Response</string>
+    <string name="submit">Submit</string>
+    <string name="selectDate">Select Date</string>
+    <string name="selectTime">Select time</string>
+    <string name="enterText">Enter Text</string>
+    <string name="score">Score</string>
+    <string name="enterAnswer">Enter your Answer</string>
+    <string name="resetAll">Reset All</string>
+    <string name="failed">Failed To Added</string>
+    <string name="pleaseEnterName">Please Enter the Name</string>
+    <string name="clientSuccessfullyAdded">Client Successfully Added</string>
+    <string name="clientUpadatedSuccessfully">Client Updated Successfully</string>
+    <string name="uploadedStatus">%1$d %</string>
+    <string name="fillAllFields">Please Fill All the Fields</string>
+    <string name="storeAddedSuccessfully">Store Successfully Added</string>
+    <string name="selectProperDate">Please select a proper date</string>
+    <string name="sucDownloadedData">Successfully Downloaded Data</string>
+    <string name="dataEmpty">The data is totally empty, Nothing to download</string>
+    <string name="pleaseEnterOption">Please enter the Option and its Value</string>
+    <string name="updatedSuccessfully">Question has been successfully updated</string>
+    <string name="editQuestion">Edit Question</string>
+    <string name="doDeleteQuestion">Do you want to delete Question</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="deleteAllClient">Do you want to delete all clients</string>
+    <string name="successfullyAdded">Successfully Added</string>
+    <string name="pleaseEnterQuestion">Please Enter the Question</string>
+    <string name="noPreviousResponse">No Previous Response Found</string>
+    <string name="pleaseAddStoreFirst">Please Add A Store first</string>
+    <string name="deleteAllStore">Do you want to delete all Store of this client</string>
+    <string name="successfullyDeleted">Successfully deleted the Client</string>
+    <string name="deleteClient">Do you want to delete %1$s</string>
+    <string name="address">Address</string>
+    <string name="phoneNo">Phone No.</string>
+    <string name="uploadImage">Upload Image</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Open Camera</string>
 
 </resources>

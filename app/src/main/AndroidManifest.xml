@@ -12,6 +12,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".Activity.UploadImagesActivity">
+        </activity>
         <activity android:name=".Activity.EditQuestionActivity">
         </activity>
         <activity android:name=".Activity.DownloadDataActivity">

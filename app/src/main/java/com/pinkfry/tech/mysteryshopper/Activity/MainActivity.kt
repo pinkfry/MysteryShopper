@@ -80,18 +80,14 @@ lateinit var alertDialog: AlertDialog.Builder
     }
     fun createAlerDialog(){
          alertDialog=AlertDialog.Builder(this@MainActivity)
-            .setMessage("Do you want to delete all clients")
-            .setTitle("Reset")
-            .setPositiveButton("Reset"
+            .setMessage(resources.getString(R.string.deleteAllClient))
+            .setTitle(resources.getString(R.string.resetAll))
+            .setPositiveButton(resources.getString(R.string.resetAll)
             ) { dialog, which ->
                 var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient))
                 .setValue(null)
 
             }
-            .setNegativeButton("Cancel",object :DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                }
-            })
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, which -> }
     }
 }

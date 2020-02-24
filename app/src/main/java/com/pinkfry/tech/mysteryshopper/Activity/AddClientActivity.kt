@@ -89,10 +89,10 @@ class AddClientActivity : AppCompatActivity() {
                         uploadPhoto(name)
                     }.addOnCanceledListener {
 
-                        Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.pleaseEnterName), Toast.LENGTH_SHORT).show()
                 }
             }
             else{
@@ -104,10 +104,10 @@ class AddClientActivity : AppCompatActivity() {
                             uploadPhoto(nodeName)
                         }.addOnCanceledListener {
 
-                            Toast.makeText(this, "Failed To Added", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.pleaseEnterName), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -152,17 +152,19 @@ class AddClientActivity : AppCompatActivity() {
 
                 }
 //                  databaseReference.child(intent.getStringExtra("name")).child("PGPROFILE").child("IMAGES").push().setValue(it.storage.downloadUrl)
-                Toast.makeText(this,"Client Successfully Added",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,resources.getString(R.string.clientSuccessfullyAdded),Toast.LENGTH_SHORT).show()
                 count = 0
             }.addOnProgressListener {
-                tvPercentage.text=(it.bytesTransferred/it.totalByteCount*100.0).toString()+"%"
+//                tvPercentage.text=(it.bytesTransferred/it.totalByteCount*100.0).toString()+"%"
+                val perUploade=it.bytesTransferred/it.totalByteCount*100.0
+                tvPercentage.text= "$perUploade%"
 
             }.addOnFailureListener {
-                Toast.makeText(this,"Failed to add the client",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,resources.getString(R.string.failed),Toast.LENGTH_SHORT).show()
             }
         }
         else{
-            Toast.makeText(this,"Client Updated Successfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,resources.getString(R.string.clientUpadatedSuccessfully),Toast.LENGTH_SHORT).show()
         }
     }
 }

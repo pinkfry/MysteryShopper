@@ -30,14 +30,14 @@
     </androidx.recyclerview.widget.RecyclerView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="end|bottom"
             android:layout_margin="10dp"
             android:src="@drawable/ic_person_add"
             android:id="@+id/fabAddStore"
             android:layout_height="wrap_content"/>
     <Button android:layout_width="wrap_content"
             android:layout_gravity="bottom|center"
-            android:text="Add Questions"
+            android:text="@string/addQuestion"
             android:gravity="center"
             android:background="@drawable/modified_circle_image_view"
             android:id="@+id/btnAddQuestions"

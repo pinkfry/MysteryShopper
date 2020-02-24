@@ -106,7 +106,7 @@ lateinit var keyArray:ArrayList<String>
                 startActivity(intent)
             }
             else{
-                Toast.makeText(this,"Please Add A Store first",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,resources.getString(R.string.pleaseAddStoreFirst),Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -274,25 +274,22 @@ lateinit var keyArray:ArrayList<String>
     }
     fun createAlerDialog(){
         alertDialog= AlertDialog.Builder(this@ShowStoreActivity)
-            .setMessage("Do you want to delete all Store of this client")
-            .setTitle("Reset")
-            .setPositiveButton("Reset"
+            .setMessage(resources.getString(R.string.deleteAllStore))
+            .setTitle(resources.getString(R.string.resetAll))
+            .setPositiveButton(resources.getString(R.string.resetAll)
             ) { dialog, which ->
                 resetData()
 
             }
-            .setNegativeButton("Cancel",object : DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                }
-            })
+            .setNegativeButton(resources.getString(R.string.cancel)
+            ) { dialog, which -> }
     }
     fun resetData() {
         var dref=FirebaseDatabase.getInstance().reference.child(resources.getString(R.string.FirebaseClient)).child(clientName)
         resetRef= dref.child(resources.getString(R.string.firebaseStore))
         resetRef.addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                Toast.makeText(this@ShowStoreActivity,"Failed, No internet Connectivity",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ShowStoreActivity,resources.getString(R.string.failed),Toast.LENGTH_SHORT).show()
                 resetRef.removeEventListener(this)
             }
 
@@ -316,7 +313,7 @@ lateinit var keyArray:ArrayList<String>
 //                    }
                 }
                 resetRef.removeEventListener(this)
-                Toast.makeText(this@ShowStoreActivity,"Reset Successful",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ShowStoreActivity,resources.getString(R.string.resetAll),Toast.LENGTH_SHORT).show()
             }
         })
 

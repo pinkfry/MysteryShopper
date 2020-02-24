@@ -132,9 +132,9 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
     }
     void showAlertDialogBox(final String storeName, final int position){
         alertDialog= new AlertDialog.Builder(activity)
-            .setMessage("Do you want to delete "+storeName)
-                .setTitle("Delete Store")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            .setMessage(String.format(activity.getResources().getString(R.string.deleteClient),storeName))
+                .setTitle(activity.getResources().getString(R.string.delete))
+                .setPositiveButton(activity.getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseReference dref=FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient)).child(clientName);
@@ -145,7 +145,7 @@ public class ClientStoreAdapter extends RecyclerView.Adapter<ClientStoreAdapter.
                 })
 
 
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            .setNegativeButton(activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 

@@ -19,13 +19,13 @@
               android:background="@drawable/modified_curved_linear_view"
               android:layout_height="wrap_content">
     <Button android:layout_width="wrap_content"
-            android:text="Choose image"
+            android:text="@string/chooseImage"
             android:id="@+id/btnChooseImage"
             android:layout_gravity="center"
             android:layout_height="wrap_content"/>
     <TextView android:layout_width="match_parent"
               android:id="@+id/tvPercentage"
-              android:text="Status of upload will be shown here"
+              android:text="@string/uploadStatus"
               android:textStyle="bold"
               android:textColor="@color/colorBlack"
               android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         <TextView android:layout_width="match_parent"
                   android:textSize="20sp"
                   android:gravity="center"
-                  android:text="OR"
+                  android:text="@string/Or"
                   android:textStyle="bold"
                   android:textColor="@color/colorBlack"
                   android:layout_margin="5dp"
@@ -57,12 +57,12 @@
     </androidx.viewpager2.widget.ViewPager2>
     <EditText android:layout_width="match_parent"
               android:id="@+id/etClientName"
-              android:hint="Name"
+              android:hint="@string/name"
               android:layout_margin="10dp"
               android:layout_height="wrap_content"
               tools:ignore="HardcodedText"/>
     <Button android:layout_width="wrap_content"
-            android:text="Add"
+            android:text="@string/Add"
             android:layout_gravity="center"
             android:id="@+id/btnAddClient"
             android:layout_height="wrap_content"/>

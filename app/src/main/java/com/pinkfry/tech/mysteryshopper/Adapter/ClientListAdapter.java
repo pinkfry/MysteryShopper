@@ -121,9 +121,9 @@ public static final String TAG="CLA";
     }
     void showAlertDialogBox(final String clientName, final int position){
         alertDialog= new AlertDialog.Builder(activity)
-                .setMessage("Do you want to delete "+clientName)
-                .setTitle("Delete Client")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setMessage(String.format(activity.getResources().getString(R.string.deleteClient),clientName))
+                .setTitle(activity.getResources().getString(R.string.delete))
+                .setPositiveButton(activity.getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseReference dref= FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient)).child(clientName);
@@ -131,7 +131,7 @@ public static final String TAG="CLA";
                                 fstore.child("IMAGES").child(clientName).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(activity, "Successfully deleted the Client", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity, activity.getResources().getString(R.string.successfullyDeleted), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                         dref.setValue(null);
@@ -141,7 +141,7 @@ public static final String TAG="CLA";
                 })
 
 
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

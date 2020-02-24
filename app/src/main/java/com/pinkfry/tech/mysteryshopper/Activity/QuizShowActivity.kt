@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pinkfry.tech.mysteryshopper.Adapter.QuestionAdapter
+import com.pinkfry.tech.mysteryshopper.Fragment.BottomSheetGalleryFragment
 import com.pinkfry.tech.mysteryshopper.R
 import com.pinkfry.tech.mysteryshopper.model.*
 import kotlinx.android.synthetic.main.activity_quiz_show.*
@@ -31,7 +32,7 @@ class QuizShowActivity : AppCompatActivity() {
         var latestDate="2019-2-16"
 
     }
-    var idPositionOfLastResponse=0;
+    var idPositionOfLastResponse=0
     var isEditing=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,6 @@ class QuizShowActivity : AppCompatActivity() {
          date=intent.getStringExtra("date")!!
         val ansToSend=intent.getStringExtra("ansToSend")
         var totalClient=intent.getIntExtra("totalClient",0)
-//        Log.d("QSA","${ansToSend.indexOf('n')}")
          if(ansToSend.equals("null")) {
              arraylistGot = ArrayList()
          }
@@ -51,20 +51,6 @@ class QuizShowActivity : AppCompatActivity() {
              val type: Type = object : TypeToken<ArrayList<SIngleResponseModel?>?>() {}.type
              arraylistGot = gson.fromJson<ArrayList<SIngleResponseModel>>(ansToSend, type)
          }
-
-
-//        ansToSendArrayList= ArrayList()
-//        for((element,index) in arraylistGot){
-//            if(element[date]==null){
-//                ansToSendArrayList.add(AnsGivenModel())
-//            }
-//            else {
-//                element[date]?.let { ansToSendArrayList.add(it) }
-//            }
-//            Log.d("QSA", element[date].toString())
-//            Log.d("QSA", ansToSendArrayList.toString()+ arraylistGot.size)
-//        }
-//        ansArray= ArrayList()
         lastResponseList= hashMapOf()
         singleResponse= SIngleResponseModel()
 
@@ -87,12 +73,6 @@ class QuizShowActivity : AppCompatActivity() {
                     Log.d("QSA","$questionArrayList")
 
                 }
-//                for(value in 1..questionArrayList.size)
-//                {
-//                    ansArray.add(AnsGivenModel())
-//                }
-
-//                singleResponse.eachAns= ArrayList(questionArrayList.size)
                 Log.d("QSA", "${singleResponse.eachAns.size}")
                 var questionAdapter=QuestionAdapter(questionArrayList,this@QuizShowActivity,clientName,storeName,
                     this@QuizShowActivity,null)
@@ -148,7 +128,7 @@ class QuizShowActivity : AppCompatActivity() {
                             dbref.removeEventListener(this)
                         }
                         else{
-                            Toast.makeText(this@QuizShowActivity,"No Previous Response Found",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@QuizShowActivity,resources.getString(R.string.noPreviousResponse),Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
@@ -162,10 +142,10 @@ class QuizShowActivity : AppCompatActivity() {
                     .child(resources.getString(R.string.ansGiven))
                     .child(date).child(idPositionOfLastResponse.toString()).setValue(singleResponse)
                   .addOnSuccessListener {
-                      Toast.makeText(this, "Successfully Added Response", Toast.LENGTH_SHORT).show()
+                      Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                       finish()
                   }.addOnFailureListener {
-                      Toast.makeText(this, "Unable to connect to internet", Toast.LENGTH_SHORT).show()
+                      Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                   }
             }
             else {
@@ -176,26 +156,26 @@ class QuizShowActivity : AppCompatActivity() {
                 dref.child("totalClient").setValue(totalClient + 1)
                 dref.child(resources.getString(R.string.ansGiven)).child(date).setValue(arraylistGot)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Successfully Added Response", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                         finish()
                     }.addOnFailureListener {
-                    Toast.makeText(this, "Unable to connect to internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.failed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
+
+
+        imageGallery.setOnClickListener{
+            val fragmentManager=supportFragmentManager.beginTransaction()
+
+            val bottomFragment=BottomSheetGalleryFragment()
+            bottomFragment.setClientName(clientName)
+            bottomFragment.setStoreName(storeName)
+           fragmentManager.add(bottomFragment,"bottomFragment")
+            fragmentManager.commit()
+        }
     }
-//    fun getFinalOptionStatus() : ArrayList<UpperAnsGivenModel>{
-//
-////       for((index,element)in ansToSendArrayList.withIndex())
-////       {
-////           var value=element.ans
-////           value.addAll(ansArray[index].ans)
-////           var ansGivenModel=AnsGivenModel(value,element.value+ ansArray[index].value)
-////           Log.d("QSA",ansGivenModel.toString())
-////           arraylistGot[index].shortedByDate[date] = ansGivenModel
-////       }
-//        return arraylistGot
-//    }
 
     fun getLastResponse(shortedByDate:HashMap<String,ArrayList<SIngleResponseModel>>): SIngleResponseModel{
         latestDate="2019-2-16"
@@ -216,7 +196,7 @@ class QuizShowActivity : AppCompatActivity() {
             return shortedByDate[date]!![idPositionOfLastResponse]
         }
         else {
-            Toast.makeText(this,"No Response Found",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,resources.getString(R.string.noPreviousResponse),Toast.LENGTH_SHORT).show()
             return SIngleResponseModel()
         }
 

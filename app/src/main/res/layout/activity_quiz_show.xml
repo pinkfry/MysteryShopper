@@ -11,17 +11,27 @@
     <LinearLayout android:layout_width="match_parent"
                   android:orientation="vertical"
                   android:layout_height="wrap_content">
+        <FrameLayout android:layout_width="match_parent"
+                      android:layout_margin="20dp"
+                      android:layout_height="wrap_content">
+        <ImageView android:layout_width="60dp"
+                android:background="@drawable/modified_circle_image_view"
+                android:gravity="center"
+              android:src="@drawable/ic_insert_photo"
+                   android:id="@+id/imageGallery"
+                   android:padding="10dp"
+                android:layout_height="60dp"/>
         <Button android:layout_width="wrap_content"
-                android:layout_gravity="right"
-                android:text="Edit Previous Response"
+                android:layout_gravity="end"
+                android:text="@string/editPreviousResponse"
                 android:clickable="false"
                 android:alpha="0.5"
                 android:background="@drawable/modified_circle_image_view"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
                 android:id="@+id/btnEditPreviousResponse"
-                android:layout_margin="20dp"
+               android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:layout_height="wrap_content"/>
+        </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:id="@+id/rvQuizQuestions"
@@ -29,7 +39,7 @@
             android:layout_height="wrap_content">
     </androidx.recyclerview.widget.RecyclerView>
     <Button android:layout_width="wrap_content"
-            android:text="Submit"
+            android:text="@string/submit"
             android:id="@+id/btnSubmit"
             android:clickable="false"
             android:alpha="0.5"

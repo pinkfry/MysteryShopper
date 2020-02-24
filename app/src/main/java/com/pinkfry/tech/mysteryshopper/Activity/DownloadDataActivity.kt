@@ -99,7 +99,7 @@ class DownloadDataActivity : AppCompatActivity() {
             if (dateArrayList.isNotEmpty())
                 getExportedData(singleStoreList, dateArrayList)
             else {
-                Toast.makeText(this, "Please select a proper date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.selectProperDate), Toast.LENGTH_SHORT).show()
             }
 //            getDataExported(singleStoreList, dateArrayList)
         }
@@ -182,7 +182,7 @@ class DownloadDataActivity : AppCompatActivity() {
 
                 Log.d("SSA", csv)
 
-                Toast.makeText(this, "Successfully Downloaded Data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.sucDownloadedData), Toast.LENGTH_SHORT).show()
                 tvLocation.text = "$clientName-$datetoday-$timeStamp.csv"
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -190,7 +190,7 @@ class DownloadDataActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         } else {
-            Toast.makeText(this, "The data is totally empty, Nothing to download", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.dataEmpty), Toast.LENGTH_SHORT).show()
 
         }
 

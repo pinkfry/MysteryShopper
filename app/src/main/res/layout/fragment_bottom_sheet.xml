@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:gravity="center"
+              android:layout_height="match_parent">
+<Button android:layout_width="match_parent"
+        android:background="@drawable/modified_circle_image_view"
+        android:layout_margin="20dp"
+        android:text="@string/uploadImage"
+        android:id="@+id/btnUploadImage"
+        android:layout_height="wrap_content"/>
+    <Button android:layout_width="match_parent"
+            android:background="@drawable/modified_circle_image_view"
+            android:layout_margin="20dp"
+            android:text="@string/gallery"
+            android:id="@+id/btnGallery"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

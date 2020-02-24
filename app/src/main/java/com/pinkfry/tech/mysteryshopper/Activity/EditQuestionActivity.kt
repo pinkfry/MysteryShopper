@@ -50,7 +50,7 @@ class EditQuestionActivity : AppCompatActivity() {
                 view.linearQuestionThird.visibility = View.GONE
                 view.linearQuestionFourth.visibility = View.GONE
                 view.etQuestion.setText(model.Question)
-                view.btnAddQuestions.text = "Edit Question"
+                view.btnAddQuestions.text = resources.getString(R.string.editQuestion)
                 var optionArrayList = model.Options
                 view.rvOptions.layoutManager = LinearLayoutManager(this)
                 var optionAdapter = OptionAdapter(optionArrayList)
@@ -63,7 +63,7 @@ class EditQuestionActivity : AppCompatActivity() {
                         etValue.setText("")
                         optionAdapter.notifyDataSetChanged()
                     } else {
-                        Toast.makeText(this, "Please enter the Option and its Value", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.pleaseEnterOption), Toast.LENGTH_SHORT).show()
                     }
                 }
                 view.btnAddQuestions.setOnClickListener {
@@ -71,7 +71,7 @@ class EditQuestionActivity : AppCompatActivity() {
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etQuestion.text.toString(), optionArrayList, 1, 1))
                         .addOnSuccessListener {
-                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                            Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                                 .show()
                             finish()
                         }
@@ -90,13 +90,13 @@ class EditQuestionActivity : AppCompatActivity() {
                 view.linearQuestionThird.visibility = View.GONE
                 view.linearQuestionFourth.visibility = View.GONE
                 view.etDateQuestion.setText(model.Question)
-                view.btnAddDateQuestions.text = "Edit Question"
+                view.btnAddDateQuestions.text = resources.getString(R.string.editQuestion)
                 view.btnAddDateQuestions.setOnClickListener {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etDateQuestion.text.toString(), ArrayList(), 2, 1))
                         .addOnSuccessListener {
-                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                            Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                                 .show()
                             finish()
                         }
@@ -114,13 +114,13 @@ class EditQuestionActivity : AppCompatActivity() {
                 view.linearQuestionFirst.visibility = View.GONE
                 view.linearQuestionSecond.visibility = View.GONE
                 view.etTimeQuestion.setText(model.Question)
-                view.btnAddTimeQuestions.text = "Edit Question"
+                view.btnAddTimeQuestions.text = resources.getString(R.string.editQuestion)
                 view.btnAddTimeQuestions.setOnClickListener {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etTimeQuestion.text.toString(), ArrayList(), 3, 1))
                         .addOnSuccessListener {
-                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                            Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                                 .show()
                             finish()
                         }
@@ -137,13 +137,13 @@ class EditQuestionActivity : AppCompatActivity() {
                 view.linearQuestionSecond.visibility = View.GONE
                 view.linearQuestionThird.visibility = View.GONE
                 view.etInputFieldQuestion.setText(model.Question)
-                view.btnInputFieldQuestion.text = "Edit Question"
+                view.btnInputFieldQuestion.text = resources.getString(R.string.editQuestion)
                 view.btnInputFieldQuestion.setOnClickListener {
                     Log.d("EQA", position.toString()!!)
                     dref.child("Questions").child("$position")
                         .setValue(QuestionsModel(view.etInputFieldQuestion.text.toString(), ArrayList(), 4, 1))
                         .addOnSuccessListener {
-                            Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                            Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                                 .show()
                             finish()
                         }
@@ -176,7 +176,7 @@ class EditQuestionActivity : AppCompatActivity() {
                     endDref.child(snapshot.key.toString()).child(resources.getString(R.string.ansGiven))
                         .child(position.toString()).child("question").setValue(value)
                 }
-                Toast.makeText(this@EditQuestionActivity, "Question has been successfully updated", Toast.LENGTH_SHORT)
+                Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                     .show()
                 endDref.removeEventListener(this)
             }
@@ -211,18 +211,18 @@ class EditQuestionActivity : AppCompatActivity() {
 
     fun showAlertDialogBox() {
         alertDialog = AlertDialog.Builder(this)
-            .setMessage("Do you want to delete Question")
-            .setTitle("Delete Question")
-            .setPositiveButton("Delete") { dialog, which ->
+            .setMessage(resources.getString(R.string.doDeleteQuestion))
+            .setTitle(resources.getString(R.string.deleteQuestions))
+            .setPositiveButton(resources.getString(R.string.delete)) { dialog, which ->
                 dref.child("Questions").child("$position").child("visible").setValue(0).addOnSuccessListener {
-                    Toast.makeText(this@EditQuestionActivity, "Question has been deleted successfully ", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@EditQuestionActivity, resources.getString(R.string.updatedSuccessfully), Toast.LENGTH_SHORT)
                         .show()
                     finish()
                 }
 //                deleteQuestion()
 
             }
-            .setNegativeButton("Cancel") { dialog, which -> }
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, which -> }
     }
 
 }
