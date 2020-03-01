@@ -102,7 +102,7 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
                 .setPositiveButton(activity.getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseReference dref= FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient))gi;
+                        DatabaseReference dref= FirebaseDatabase.getInstance().getReference().child(activity.getResources().getString(R.string.FirebaseClient));
                         dref.child("gallery").child(key).setValue(null);
 //                        StorageReference fstore= FirebaseStorage.getInstance().getReference();
 //                        fstore.child("IMAGES").child(clientName).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
