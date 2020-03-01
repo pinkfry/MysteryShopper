@@ -105,7 +105,7 @@ class UploadImagesActivity : AppCompatActivity() {
                     databaseReference.child(resources.getString(R.string.FirebaseClient)).child(clientName).child(resources.getString(R.string.firebaseStore)).child(storeName).child("gallery").push().setValue(GalleryModel(it.toString(),etTagLine.text.toString()))
 
                 }
-                Toast.makeText(this, resources.getString(R.string.clientSuccessfullyAdded), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.successfullyAdded), Toast.LENGTH_SHORT).show()
                 count = 0
             }.addOnProgressListener {
                 val perUploade = it.bytesTransferred / it.totalByteCount * 100.0

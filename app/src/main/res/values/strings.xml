@@ -63,5 +63,6 @@
     <string name="nothingToShow">Nothing to show, No images found</string>
     <string name="enterTagLine">Enter the Tag Line</string>
     <string name="pleaseSelectImage">Please Select Image</string>
+    <string name="deleteImage">Do you want do delete image</string>
 
 </resources>

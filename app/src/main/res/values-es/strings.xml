@@ -25,7 +25,7 @@
     <string name="selectDate">Seleccione fecha</string>
     <string name="selectTime">Seleccione hora</string>
     <string name="enterText">Ingrese texto</string>
-    <string name="score">Calificacion</string>
+    <string name="score">Calif.</string>
     <string name="enterAnswer">Ingrese su respuesta</string>
     <string name="resetAll">Resetear todo</string>
     <string name="failed">Error al agregar</string>
@@ -53,7 +53,6 @@
     <string name="deleteAllStore">¿Desea eliminar todas las tiendas de este cliente?</string>
     <string name="successfullyDeleted">" Cliente añadida exitosamente"</string>
     <string name="deleteClient">Desea borrar %1$s</string>
-    <string name="address">habla a</string>
     <string name="phoneNo">Telefono no.</string>
     <string name="uploadImage">Cargar imagen</string>
     <string name="gallery">Galería</string>
@@ -61,4 +60,6 @@
     <string name="nothingToShow">Nada que mostrar, no se encontraron imágenes</string>
     <string name="enterTagLine">Ingrese la línea de etiqueta</string>
     <string name="pleaseSelectImage">Por favor seleccione imagen</string>
+    <string name="deleteImage">¿Quieres borrar la imagen?</string>
+    <string name="address">Domicilio</string>
 </resources>
